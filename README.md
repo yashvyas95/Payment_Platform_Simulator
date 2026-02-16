@@ -21,7 +21,7 @@
 
 ## 🎬 Demo
 
-<video src="docs/Demo.mp4" controls width="100%"></video>
+https://github.com/yashvyas95/Payment_Platform_Simulator/blob/432efe4905268177805d7769d6557757bdf4538e/docs/Demo.mp4
 
 > *Full walkthrough: payment processing, test card scenarios, real-time WebSocket updates, and the React dashboard.*
 
