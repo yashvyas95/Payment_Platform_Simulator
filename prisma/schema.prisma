@@ -1,0 +1,417 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== Enums ====================
+
+enum MerchantStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+enum TransactionStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  VOIDED
+  CHARGEBACKED
+}
+
+enum TransactionType {
+  PAYMENT
+  REFUND
+  CHARGEBACK
+  PAYOUT
+}
+
+enum PaymentMethodType {
+  CARD
+  BANK_ACCOUNT
+  WALLET
+  QR_CODE
+}
+
+enum WebhookStatus {
+  PENDING
+  DELIVERED
+  FAILED
+}
+
+enum EventType {
+  PAYMENT_AUTHORIZED
+  PAYMENT_CAPTURED
+  PAYMENT_FAILED
+  PAYMENT_REFUNDED
+  PAYMENT_VOIDED
+  PAYMENT_CHARGEBACKED
+  PAYMENT_REQUIRES_ACTION
+  SETTLEMENT_COMPLETED
+  FRAUD_DETECTED
+}
+
+enum UserRole {
+  ADMIN
+  MERCHANT_OWNER
+  MERCHANT_STAFF
+  CUSTOMER
+  API_USER
+}
+
+enum Permission {
+  CREATE_PAYMENT
+  READ_PAYMENT
+  UPDATE_PAYMENT
+  DELETE_PAYMENT
+  REFUND_PAYMENT
+  MANAGE_WEBHOOKS
+  VIEW_ANALYTICS
+  MANAGE_API_KEYS
+  MANAGE_USERS
+  ADMIN_ACCESS
+}
+
+enum PaymentGateway {
+  STRIPE
+  PAYPAL
+  RAZORPAY
+  SIMULATOR
+}
+
+enum ThreeDSecureStatus {
+  NOT_REQUIRED
+  REQUIRED
+  AUTHENTICATED
+  FAILED
+  ATTEMPTED
+}
+
+// ==================== Models ====================
+
+model Merchant {
+  id                String          @id @default(uuid())
+  name              String
+  email             String          @unique
+  apiKey            String          @unique @map("api_key")
+  apiSecret         String          @map("api_secret")
+  status            MerchantStatus  @default(PENDING)
+  feeRate           Decimal         @default(0.029) @map("fee_rate") @db.Decimal(5, 4)
+  feeFixed          Decimal         @default(0.30) @map("fee_fixed") @db.Decimal(10, 2)
+  currency          String          @default("USD")
+  webhookUrl        String?         @map("webhook_url")
+  webhookSecret     String?         @map("webhook_secret")
+  metadata          Json?
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  customers         Customer[]
+  transactions      Transaction[]
+  settlements       Settlement[]
+  webhooks          Webhook[]
+  users             User[]
+  gatewayConfigs    GatewayConfig[]
+
+  @@map("merchants")
+}
+
+model User {
+  id                String          @id @default(uuid())
+  merchantId        String?         @map("merchant_id")
+  email             String          @unique
+  passwordHash      String          @map("password_hash")
+  fullName          String          @map("full_name")
+  role              UserRole        @default(CUSTOMER)
+  permissions       Permission[]
+  isActive          Boolean         @default(true) @map("is_active")
+  lastLoginAt       DateTime?       @map("last_login_at")
+  metadata          Json?
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  merchant          Merchant?       @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  refreshTokens     RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id                String          @id @default(uuid())
+  userId            String          @map("user_id")
+  token             String          @unique
+  expiresAt         DateTime        @map("expires_at")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  revokedAt         DateTime?       @map("revoked_at")
+  replacedBy        String?         @map("replaced_by")
+  userAgent         String?         @map("user_agent")
+  ipAddress         String?         @map("ip_address")
+
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model Customer {
+  id                String           @id @default(uuid())
+  merchantId        String           @map("merchant_id")
+  email             String?
+  name              String?
+  phone             String?
+  metadata          Json?
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  merchant          Merchant         @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  paymentMethods    PaymentMethod[]
+  transactions      Transaction[]
+
+  @@unique([merchantId, email])
+  @@map("customers")
+}
+
+model PaymentMethod {
+  id                String              @id @default(uuid())
+  customerId        String              @map("customer_id")
+  type              PaymentMethodType
+  token             String              // Tokenized payment data
+  last4             String?
+  brand             String?
+  expMonth          Int?                @map("exp_month")
+  expYear           Int?                @map("exp_year")
+  cardholderName    String?             @map("cardholder_name")
+  isDefault         Boolean             @default(false) @map("is_default")
+  metadata          Json?
+  createdAt         DateTime            @default(now()) @map("created_at")
+
+  customer          Customer            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  transactions      Transaction[]
+
+  @@index([customerId])
+  @@map("payment_methods")
+}
+
+model Transaction {
+  id                String              @id @default(uuid())
+  merchantId        String              @map("merchant_id")
+  customerId        String?             @map("customer_id")
+  paymentMethodId   String?             @map("payment_method_id")
+  amount            Decimal             @db.Decimal(12, 2)
+  currency          String              @default("USD")
+  status            TransactionStatus
+  type              TransactionType
+  description       String?
+  gateway           PaymentGateway      @default(SIMULATOR)
+  authorizationCode String?             @map("authorization_code")
+  errorCode         String?             @map("error_code")
+  errorMessage      String?             @map("error_message")
+  capturedAmount    Decimal?            @map("captured_amount") @db.Decimal(12, 2)
+  refundedAmount    Decimal?            @default(0) @map("refunded_amount") @db.Decimal(12, 2)
+  feeAmount         Decimal?            @map("fee_amount") @db.Decimal(12, 2)
+  netAmount         Decimal?            @map("net_amount") @db.Decimal(12, 2)
+  parentId          String?             @map("parent_id") // For refunds and chargebacks
+  settlementId      String?             @map("settlement_id")
+  idempotencyKey    String?             @unique @map("idempotency_key")
+  threeDSecureId    String?             @unique @map("three_d_secure_id")
+  metadata          Json?
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
+
+  merchant          Merchant            @relation(fields: [merchantId], references: [id])
+  customer          Customer?           @relation(fields: [customerId], references: [id])
+  paymentMethod     PaymentMethod?      @relation(fields: [paymentMethodId], references: [id])
+  parent            Transaction?        @relation("RefundRelation", fields: [parentId], references: [id])
+  refunds           Transaction[]       @relation("RefundRelation")
+  settlement        Settlement?         @relation(fields: [settlementId], references: [id])
+  events            TransactionEvent[]
+  threeDSecure      ThreeDSecure?       @relation(fields: [threeDSecureId], references: [id])
+
+  @@index([merchantId, createdAt(sort: Desc)])
+  @@index([status])
+  @@index([customerId])
+  @@index([idempotencyKey])
+  @@index([gateway])
+  @@map("transactions")
+}
+
+model TransactionEvent {
+  id                String              @id @default(uuid())
+  transactionId     String              @map("transaction_id")
+  eventType         EventType           @map("event_type")
+  previousStatus    String?             @map("previous_status")
+  newStatus         String?             @map("new_status")
+  metadata          Json?
+  createdAt         DateTime            @default(now()) @map("created_at")
+
+  transaction       Transaction         @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+  @@map("transaction_events")
+}
+
+model Settlement {
+  id                String              @id @default(uuid())
+  merchantId        String              @map("merchant_id")
+  settlementDate    DateTime            @map("settlement_date") @db.Date
+  grossAmount       Decimal             @map("gross_amount") @db.Decimal(12, 2)
+  feeAmount         Decimal             @map("fee_amount") @db.Decimal(12, 2)
+  netAmount         Decimal             @map("net_amount") @db.Decimal(12, 2)
+  transactionCount  Int                 @map("transaction_count")
+  status            String              @default("PENDING")
+  currency          String              @default("USD")
+  metadata          Json?
+  createdAt         DateTime            @default(now()) @map("created_at")
+
+  merchant          Merchant            @relation(fields: [merchantId], references: [id])
+  transactions      Transaction[]
+
+  @@index([merchantId, settlementDate(sort: Desc)])
+  @@map("settlements")
+}
+
+model Webhook {
+  id                String              @id @default(uuid())
+  merchantId        String              @map("merchant_id")
+  url               String
+  events            String[]            // Array of event types to subscribe to
+  secret            String              // For webhook signature verification
+  isActive          Boolean             @default(true) @map("is_active")
+  metadata          Json?
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
+
+  merchant          Merchant            @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  deliveries        WebhookDelivery[]
+
+  @@index([merchantId])
+  @@map("webhooks")
+}
+
+model WebhookDelivery {
+  id                String              @id @default(uuid())
+  webhookId         String              @map("webhook_id")
+  eventType         EventType           @map("event_type")
+  payload           Json
+  status            WebhookStatus
+  httpStatus        Int?                @map("http_status")
+  errorMessage      String?             @map("error_message")
+  retryCount        Int                 @default(0) @map("retry_count")
+  nextRetryAt       DateTime?           @map("next_retry_at")
+  deliveredAt       DateTime?           @map("delivered_at")
+  createdAt         DateTime            @default(now()) @map("created_at")
+
+  webhook           Webhook             @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId, status])
+  @@index([nextRetryAt])
+  @@map("webhook_deliveries")
+}
+
+// Simulator Configuration (stored in DB for dynamic updates)
+model SimulatorConfig {
+  id                    String    @id @default(uuid())
+  merchantId            String?   @unique @map("merchant_id")
+  defaultDelayMs        Int       @default(1000) @map("default_delay_ms")
+  minDelayMs            Int       @default(500) @map("min_delay_ms")
+  maxDelayMs            Int       @default(2000) @map("max_delay_ms")
+  successRate           Decimal   @default(0.85) @db.Decimal(3, 2)
+  failureDistribution   Json      @map("failure_distribution") // JSON object with failure rates
+  networkSimulation     Boolean   @default(true) @map("network_simulation")
+  fraudDetectionEnabled Boolean   @default(true) @map("fraud_detection_enabled")
+  metadata              Json?
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  @@map("simulator_configs")
+}
+
+// 3D Secure Authentication
+model ThreeDSecure {
+  id                    String              @id @default(uuid())
+  transactionId         String?             @unique @map("transaction_id")
+  status                ThreeDSecureStatus
+  authenticationUrl     String?             @map("authentication_url")
+  eci                   String?             // Electronic Commerce Indicator
+  cavv                  String?             // Cardholder Authentication Verification Value
+  xid                   String?             // Transaction Identifier
+  version               String              @default("2.0")
+  attemptedAt           DateTime?           @map("attempted_at")
+  authenticatedAt       DateTime?           @map("authenticated_at")
+  metadata              Json?
+  createdAt             DateTime            @default(now()) @map("created_at")
+
+  transaction           Transaction?
+
+  @@map("three_d_secure")
+}
+
+// Payment Gateway Configuration
+model GatewayConfig {
+  id                    String              @id @default(uuid())
+  merchantId            String              @map("merchant_id")
+  gateway               PaymentGateway
+  isActive              Boolean             @default(true) @map("is_active")
+  isPrimary             Boolean             @default(false) @map("is_primary")
+  apiKey                String              @map("api_key")
+  apiSecret             String              @map("api_secret")
+  webhookSecret         String?             @map("webhook_secret")
+  config                Json                // Gateway-specific configuration
+  metadata              Json?
+  createdAt             DateTime            @default(now()) @map("created_at")
+  updatedAt             DateTime            @updatedAt @map("updated_at")
+
+  merchant              Merchant            @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  @@unique([merchantId, gateway])
+  @@index([merchantId, isActive])
+  @@map("gateway_configs")
+}
+
+// Event Store for Event Sourcing
+model EventStore {
+  id                    String              @id @default(uuid())
+  aggregateId           String              @map("aggregate_id")
+  aggregateType         String              @map("aggregate_type") // "Transaction", "Payment", etc.
+  eventType             String              @map("event_type")
+  eventData             Json                @map("event_data")
+  eventMetadata         Json?               @map("event_metadata")
+  version               Int                 @default(1)
+  timestamp             DateTime            @default(now())
+  causationId           String?             @map("causation_id")
+  correlationId         String?             @map("correlation_id")
+
+  @@index([aggregateId, aggregateType])
+  @@index([aggregateType, timestamp(sort: Desc)])
+  @@index([eventType])
+  @@map("event_store")
+}
+
+// Circuit Breaker State
+model CircuitBreakerState {
+  id                    String              @id @default(uuid())
+  serviceName           String              @unique @map("service_name")
+  state                 String              @default("CLOSED") // CLOSED, OPEN, HALF_OPEN
+  failureCount          Int                 @default(0) @map("failure_count")
+  successCount          Int                 @default(0) @map("success_count")
+  lastFailureAt         DateTime?           @map("last_failure_at")
+  lastSuccessAt         DateTime?           @map("last_success_at")
+  nextAttemptAt         DateTime?           @map("next_attempt_at")
+  metadata              Json?
+  updatedAt             DateTime            @updatedAt @map("updated_at")
+
+  @@map("circuit_breaker_state")
+}
+
