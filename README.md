@@ -6,11 +6,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![Tests](https://img.shields.io/badge/Tests-165%20passing-success)](tests/)
-[![Coverage](https://img.shields.io/badge/Coverage-80%25-brightgreen)](coverage/)
+[![Coverage](https://img.shields.io/badge/Coverage-80%25-brightgreen)](tests/)
 [![CI](https://img.shields.io/github/actions/workflow/status/yashvyas95/Payment_Platform_Simulator/ci.yml?label=CI)](https://github.com/yashvyas95/Payment_Platform_Simulator/actions)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/yashvyas95/Payment_Platform_Simulator/issues)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Yash%20Vyas-blue?logo=linkedin)](https://www.linkedin.com/in/yashvyas0/)
 
 [Features](#-feature-overview) • [Architecture](#-architecture-high-level-design) • [Quick Start](#-quick-start) • [API Docs](#-api-documentation) • [ADR](#-architecture-decision-records-adr)
@@ -21,7 +21,9 @@
 
 ## 🎬 Demo
 
-<!-- Replace with a recorded GIF/video: create payment → real-time WebSocket dashboard update → view transaction → trigger refund -->
+<video src="docs/Demo.mp4" controls width="100%"></video>
+
+> *Full walkthrough: payment processing, test card scenarios, real-time WebSocket updates, and the React dashboard.*
 
 ---
 
@@ -55,9 +57,9 @@
 | **Test Coverage**         | 165 passing tests across 29 suites (~80% line coverage)                                       |
 | **Lines of Code**         | ~5,000+ TypeScript                                                                            |
 | **Services**              | 13 independent services                                                                       |
-| **API Endpoints**         | 25+ RESTful routes                                                                            |
-| **Database Models**       | 20+ Prisma models                                                                             |
-| **Real-time Support**     | ✅ WebSocket (Socket.IO)                                                                      |
+| **API Endpoints**         | 19 RESTful routes                                                                             |
+| **Database Models**       | 15 Prisma models                                                                              |
+| **Real-time Support**     | ✅ WebSocket (@fastify/websocket)                                                             |
 | **Multi-Gateway**         | ✅ Stripe, PayPal, Razorpay                                                                   |
 | **Security**              | ✅ JWT + RBAC + 3DS                                                                           |
 
@@ -1012,9 +1014,9 @@ Use PostgreSQL 15 as primary database.
 | Technology             | Version | Purpose                                 |
 | ---------------------- | ------- | --------------------------------------- |
 | **Node.js**            | 20+     | Runtime environment                     |
-| **TypeScript**         | 5.0     | Type safety                             |
+| **TypeScript**         | 5.3     | Type safety                             |
 | **Fastify**            | 4.26    | Web framework (10x faster than Express) |
-| **Prisma**             | 5.22    | Type-safe ORM                           |
+| **Prisma**             | 5.8     | Type-safe ORM                           |
 | **PostgreSQL**         | 15      | Primary database (ACID compliance)      |
 | **Redis**              | 7       | Caching, rate limiting                  |
 | **RabbitMQ**           | 3.12    | Message queue (webhooks)                |
@@ -1022,21 +1024,21 @@ Use PostgreSQL 15 as primary database.
 | **@fastify/websocket** | 11.2    | WebSocket support                       |
 | **bcryptjs**           | Latest  | Password hashing                        |
 | **Jest**               | Latest  | Testing framework                       |
-| **Winston**            | Latest  | Logging                                 |
+| **Pino**               | 8.18    | Structured logging                      |
 
 ### Frontend
 
 | Technology           | Version | Purpose                 |
 | -------------------- | ------- | ----------------------- |
 | **React**            | 19      | UI library              |
-| **TypeScript**       | 5.0     | Type safety             |
+| **TypeScript**       | ~5.9    | Type safety             |
 | **Vite**             | 7.3     | Build tool (fast HMR)   |
 | **Redux Toolkit**    | Latest  | Global state management |
 | **React Query**      | Latest  | Server state + caching  |
 | **Material-UI**      | 5.x     | Component library       |
 | **Socket.IO Client** | Latest  | WebSocket client        |
 | **Recharts**         | Latest  | Charts and analytics    |
-| **React Router**     | 6       | Client-side routing     |
+| **React Router**     | 7       | Client-side routing     |
 
 ### DevOps & Infrastructure
 
@@ -1046,7 +1048,6 @@ Use PostgreSQL 15 as primary database.
 | **Docker Compose** | Multi-container orchestration |
 | **ESLint**         | Code linting                  |
 | **Prettier**       | Code formatting               |
-| **Husky**          | Git hooks                     |
 
 ---
 
@@ -1147,13 +1148,11 @@ Visit **http://localhost:3000/docs** for full interactive API documentation (Swa
 
 ### Core API Endpoints
 
-#### Authentication
+#### Merchants
 
 ```http
-POST /v1/auth/register
-POST /v1/auth/login
-POST /v1/auth/refresh
-POST /v1/auth/logout
+POST   /v1/merchants/register    # Register new merchant
+GET    /v1/merchants/me           # Get merchant details
 ```
 
 #### Payments
@@ -1173,11 +1172,19 @@ GET    /v1/transactions          # List transactions (with filters)
 GET    /v1/transactions/:id      # Get transaction details
 ```
 
-#### 3D Secure
+#### Customers
 
 ```http
-POST   /v1/3ds/initiate         # Start 3DS auth
-POST   /v1/3ds/complete          # Complete 3DS challenge
+POST   /v1/customers              # Create customer
+GET    /v1/customers/:id          # Get customer details
+```
+
+#### Webhooks
+
+```http
+POST   /v1/webhooks               # Create webhook
+GET    /v1/webhooks               # List webhooks
+DELETE /v1/webhooks/:id           # Delete webhook
 ```
 
 #### Simulator
@@ -1185,27 +1192,20 @@ POST   /v1/3ds/complete          # Complete 3DS challenge
 ```http
 GET    /v1/simulator/config     # Get simulator settings
 PUT    /v1/simulator/config     # Update simulator settings
-```
-
-#### Analytics (CQRS Queries)
-
-```http
-GET    /v1/analytics/payments   # Payment analytics
-GET    /v1/analytics/trends     # Trend analysis
-GET    /v1/analytics/top-customers
+GET    /v1/simulator/scenarios   # List test scenarios
 ```
 
 ### Test Card Numbers
 
-| Card Number        | Scenario         | Expected Result            |
-| ------------------ | ---------------- | -------------------------- |
-| `4242424242424242` | Success          | Payment succeeds ✅        |
-| `4000000000000002` | Declined         | Card declined ❌           |
-| `4000000000009995` | Insufficient     | Insufficient funds ❌      |
-| `4000000000000069` | Expired          | Card expired ❌            |
-| `4000000000000127` | Invalid CVV      | CVV check failed ❌        |
-| `4000000000000119` | Processing Error | Gateway error ❌           |
-| `4000000000003220` | 3DS Required     | Triggers 3D Secure flow 🔐 |
+| Card Number        | Scenario        | Expected Result            |
+| ------------------ | --------------- | -------------------------- |
+| `4242424242424242` | Success         | Payment succeeds ✅        |
+| `4000000000000002` | Declined        | Card declined ❌           |
+| `4000000000009995` | Insufficient    | Insufficient funds ❌      |
+| `4000000000000069` | Expired         | Card expired ❌            |
+| `4000000000000127` | Invalid CVV     | CVV check failed ❌        |
+| `4000000000000119` | Generic Decline | Card declined ❌           |
+| `4000002500003155` | 3DS Required    | Triggers 3D Secure flow 🔐 |
 
 ### Example: Create Payment
 
@@ -1216,16 +1216,15 @@ curl -X POST http://localhost:3000/v1/payments \
   -d '{
     "amount": 1000,
     "currency": "USD",
-    "paymentMethod": {
+    "payment_method": {
       "type": "card",
-      "cardNumber": "4242424242424242",
-      "expiryMonth": "12",
-      "expiryYear": "2027",
-      "cvv": "123"
-    },
-    "customer": {
-      "email": "customer@example.com",
-      "name": "John Doe"
+      "card": {
+        "number": "4242424242424242",
+        "exp_month": 12,
+        "exp_year": 2027,
+        "cvv": "123",
+        "name": "John Doe"
+      }
     },
     "description": "Order #1234"
   }'
@@ -1235,14 +1234,26 @@ curl -X POST http://localhost:3000/v1/payments \
 
 ```json
 {
-  "id": "txn_abc123",
-  "status": "CAPTURED",
-  "amount": 1000,
-  "currency": "USD",
-  "gateway": "STRIPE",
-  "gatewayTransactionId": "ch_stripe_123",
-  "authorizationCode": "ABC123",
-  "createdAt": "2026-02-15T12:00:00Z"
+  "success": true,
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "object": "payment",
+    "amount": 1000,
+    "currency": "USD",
+    "status": "captured",
+    "type": "payment",
+    "description": "Order #1234",
+    "authorization_code": "AUTH_X9UNZXI5PKF",
+    "captured_amount": 1000,
+    "refunded_amount": 0,
+    "error": null,
+    "metadata": {
+      "gateway": "simulator",
+      "requires3DS": false
+    },
+    "created": 1739577600,
+    "updated": 1739577600
+  }
 }
 ```
 
@@ -1302,8 +1313,6 @@ tests/
 │   ├── webhook-routes.test.ts
 │   ├── simulator-routes.test.ts
 │   └── merchant-routes.test.ts
-└── e2e/
-    └── (future end-to-end tests)
 ```
 
 ### Running Tests
@@ -1522,7 +1531,7 @@ const socket = io(url, {
 
 **What we learned**:
 
-- Structured logging (JSON) with Winston
+- Structured logging (JSON) with Pino
 - Request ID tracking across services
 - Metrics for:
   - Payment success rate
@@ -1657,41 +1666,6 @@ We welcome contributions! Here's how to get started:
   test: add event store replay tests
   ```
 
-### Areas for Contribution
-
-**High Priority**:
-
-- [x] ~~Increase test coverage~~ (achieved ~80%)
-- [x] ~~Add integration tests~~ (7 route integration suites)
-- [ ] Add E2E tests with Playwright
-- [ ] Implement OAuth 2.0 flow
-- [ ] Add more gateway adapters (Square, Adyen)
-
-**Medium Priority**:
-
-- [ ] GraphQL API alongside REST
-- [ ] Admin dashboard (React)
-- [ ] Webhook retry mechanism
-- [ ] Payment dispute handling
-- [ ] Subscription/recurring payments
-
-**Documentation**:
-
-- [ ] API endpoint examples for all routes
-- [ ] Video tutorials
-- [ ] Deployment guides (AWS, GCP, Azure)
-- [ ] Performance tuning guide
-
-### Code Review Checklist
-
-- [ ] Code follows TypeScript best practices
-- [ ] Tests pass (`npm test`)
-- [ ] No linting errors (`npm run lint`)
-- [ ] Documentation updated
-- [ ] Commit messages are clear
-- [ ] No breaking changes (or clearly documented)
-- [ ] Added/updated tests for changes
-
 ---
 
 ## 📄 License
@@ -1738,35 +1712,7 @@ SOFTWARE.
 - **Documentation**: See [docs](./ARCHITECTURE.md) folder
 - **Issues**: Open an issue in the repository
 - **Discussions**: Use GitHub Discussions for questions
-- **Security**: See [SECURITY.md](./SECURITY.md) for reporting vulnerabilities
-
----
-
-## 🗺️ Roadmap
-
-### Version 1.1 (Q2 2026)
-
-- [x] ~~Increase test coverage to 80%~~ (achieved)
-- [ ] Add GraphQL API
-- [ ] Implement webhook retry mechanism
-- [ ] Add Kafka support for event streaming
-- [ ] Performance benchmarks
-
-### Version 1.2 (Q3 2026)
-
-- [ ] Subscription/recurring payments
-- [ ] Payment disputes and chargebacks
-- [ ] Multi-currency real-time conversion
-- [ ] Advanced fraud detection
-- [ ] Admin dashboard
-
-### Version 2.0 (Q4 2026)
-
-- [ ] Microservices architecture
-- [ ] Kubernetes deployment
-- [ ] Multi-region support
-- [ ] Machine learning fraud detection
-- [ ] Mobile app (React Native)
+- **Security**: Report vulnerabilities via [GitHub Security Advisories](https://github.com/yashvyas95/Payment_Platform_Simulator/security/advisories)
 
 ---
 
@@ -1789,15 +1735,15 @@ Made with ❤️ by [Yash Vyas](https://www.linkedin.com/in/yashvyas0/) using mo
 | Metric                | Value      |
 | --------------------- | ---------- |
 | Total Lines of Code   | ~5,000+    |
-| TypeScript Files      | 50+        |
-| Database Models       | 20+        |
-| API Endpoints         | 25+        |
+| TypeScript Files      | 40+        |
+| Database Models       | 15         |
+| API Endpoints         | 19         |
 | Services              | 13         |
 | Architecture Patterns | 8          |
 | Test Suites           | 29         |
 | Tests Passing         | 165        |
 | Test Coverage         | ~80% lines |
 | Docker Containers     | 3          |
-| Documentation Files   | 8          |
+| Documentation Files   | 4          |
 
 **Last Updated**: February 15, 2026

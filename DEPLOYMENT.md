@@ -1,6 +1,7 @@
 # Deployment Guide
 
 ## Table of Contents
+
 - [Prerequisites](#prerequisites)
 - [Environment Setup](#environment-setup)
 - [Docker Deployment](#docker-deployment)
@@ -11,7 +12,7 @@
 ## Prerequisites
 
 - Docker and Docker Compose (for containerized deployment)
-- Node.js 18+ (for non-containerized deployment)
+- Node.js 20+ (for non-containerized deployment)
 - PostgreSQL 15+
 - Redis 7+
 - RabbitMQ 3.12+
@@ -100,6 +101,7 @@ services:
 ### AWS (ECS/EKS)
 
 1. **Build and push Docker image**:
+
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account-id>.dkr.ecr.us-east-1.amazonaws.com
 docker build -t payment-simulator .
@@ -193,8 +195,7 @@ psql -h hostname -U username -d database_name < backup.sql
 ### Health Check Endpoints
 
 - Health: `GET /health`
-- Readiness: `GET /health/ready`
-- Liveness: `GET /health/live`
+- Detailed: `GET /health/detailed`
 
 ### Logging
 
@@ -300,6 +301,7 @@ npm run prisma:migrate resolve --rolled-back "migration-name"
 ## Support
 
 For deployment issues:
+
 - Check logs: `docker-compose logs -f`
 - Review environment variables
 - Verify database connectivity

@@ -1,10 +1,10 @@
 # Payment Platform Simulator - Architecture & Documentation
 
 > **Version:** 1.0.0  
-> **Last Updated:** February 14, 2025  
+> **Last Updated:** February 15, 2026  
 > **Status:** Production Ready
 
-**🎯 IMPORTANT NOTE:** This document describes the comprehensive architectural design and vision for the Payment Platform Simulator. It includes both implemented features and future roadmap items for expansion.
+**🎯 NOTE:** This document describes the architecture and implemented features of the Payment Platform Simulator.
 
 ---
 
@@ -15,9 +15,8 @@
 3. [System Architecture](#system-architecture)
 4. [Tech Stack](#tech-stack)
 5. [Key Insights](#key-insights)
-6. [Implementation Roadmap](#implementation-roadmap)
-7. [Security Considerations](#security-considerations)
-8. [API Design](#api-design)
+6. [Security Considerations](#security-considerations)
+7. [API Design](#api-design)
 
 ---
 
@@ -51,20 +50,10 @@ The **Payment Platform Simulator** is a comprehensive testing and development en
 
 #### Transaction Types
 
-- ✅ **Card Payments** (Credit/Debit cards)
+- **Card Payments** (Credit/Debit cards)
   - Authorization (hold funds)
   - Capture (complete payment)
   - Authorization + Capture (single step)
-- ✅ **Bank Transfers**
-  - ACH (Automated Clearing House)
-  - Wire transfers
-  - SEPA (Single Euro Payments Area)
-- ✅ **Digital Wallets**
-  - PayPal simulation
-  - Apple Pay mock
-  - Google Pay mock
-- ✅ **QR Code Payments**
-- 🔄 **Cryptocurrency** (optional future feature)
 
 #### Transaction Operations
 
@@ -123,56 +112,8 @@ The **Payment Platform Simulator** is a comprehensive testing and development en
 
 - **Multi-Currency Support**
   - USD, EUR, GBP, JPY, INR, etc.
-  - Real-time exchange rate simulation
-  - Currency conversion fees
 
-- **KYC Simulation**
-  - Basic verification flow
-  - Document upload mock
-  - Status transitions (pending → verified → rejected)
-
-### 4. Fraud Detection Simulation
-
-```javascript
-// Fraud Detection Rules
-{
-  velocityChecks: {
-    maxTransactionsPerHour: 10,
-    maxAmountPerDay: 10000,
-    suspiciousPattern: "multiple_small_transactions"
-  },
-  geoValidation: {
-    blockHighRiskCountries: true,
-    flagMismatchedIpCard: true
-  },
-  amountThresholds: {
-    highValueAlert: 1000,
-    unusualAmountPattern: true
-  },
-  behavioralAnalysis: {
-    newCardFirstTransaction: "flag",
-    nighttimeTransactions: "monitor",
-    crossBorderTransactions: "verify"
-  }
-}
-```
-
-### 5. Settlement & Reconciliation
-
-- **Batch Settlement**
-  - Daily settlement runs (configurable schedule)
-  - Net settlement calculation
-  - Settlement file generation
-- **Fee Calculation**
-  - Percentage-based fees (e.g., 2.9% + $0.30)
-  - Tiered pricing
-  - Volume-based discounts
-- **Reconciliation Reports**
-  - Transaction vs. Settlement matching
-  - Discrepancy identification
-  - Export formats (CSV, JSON, PDF)
-
-### 6. Webhook & Notifications
+### 4. Webhook & Notifications
 
 #### Webhook Events
 
@@ -194,7 +135,7 @@ fraud.detected
 - Webhook POST requests
 - WebSocket real-time updates
 
-### 7. Reporting & Analytics
+### 5. Reporting & Analytics
 
 #### Available Reports
 
@@ -213,7 +154,7 @@ fraud.detected
 - PDF for formal reporting
 - Real-time API endpoints
 
-### 8. Configuration & Control
+### 6. Configuration & Control
 
 #### Simulator Control Panel
 
@@ -245,24 +186,20 @@ simulator_config:
 - **Chaos Mode**: Random failures for resilience testing
 - **Replay Mode**: Replay recorded transactions
 
-### 9. Security Features
+### 7. Security Features
 
 - **Authentication**
   - API Key authentication
-  - JWT token-based auth
-  - OAuth 2.0 flows
+  - JWT token-based auth with refresh rotation
 - **Data Protection**
-  - Encryption at rest (AES-256)
-  - Encryption in transit (TLS 1.3)
+  - Encryption in transit (TLS)
   - PAN tokenization
   - CVV never stored
 - **Access Control**
-  - Role-based access control (RBAC)
-  - IP whitelisting
+  - Role-based access control (RBAC) with 5 roles and 10 permissions
   - Rate limiting (per API key)
-  - Request signing
 
-### 10. Integration Points
+### 8. Integration Points
 
 #### REST API
 
@@ -275,32 +212,19 @@ POST   /v1/payments/:id/void
 GET    /v1/transactions
 GET    /v1/merchants
 POST   /v1/customers
+GET    /v1/customers
+GET    /v1/customers/:id
+POST   /v1/webhooks
+GET    /v1/webhooks
+GET    /v1/simulator/config
+PUT    /v1/simulator/config
+POST   /v1/simulator/test
+GET    /health
+GET    /health/detailed
+GET    /docs              (Swagger UI)
 ```
 
-#### GraphQL API (Optional)
-
-```graphql
-type Mutation {
-  createPayment(input: PaymentInput!): Payment
-  capturePayment(id: ID!): Payment
-  refundPayment(id: ID!, amount: Float): Payment
-}
-
-type Query {
-  payment(id: ID!): Payment
-  transactions(filter: TransactionFilter): [Transaction]
-}
-```
-
-#### SDKs & Libraries
-
-- Node.js SDK
-- Python SDK
-- Java SDK
-- PHP SDK
-- .NET SDK
-
-### 11. Testing Features
+### 9. Testing Features
 
 #### Test Card Numbers
 
@@ -315,7 +239,7 @@ type Query {
 │ 4000000000009995    │ Visa               │ Insufficient    │
 │ 4000000000000069    │ Visa               │ Expired Card    │
 │ 4000000000000127    │ Visa               │ Invalid CVV     │
-│ 4000000000000119    │ Visa               │ Processing Error│
+│ 4000000000000119    │ Visa               │ Generic Decline│
 └─────────────────────┴────────────────────┴─────────────────┘
 ```
 
@@ -327,16 +251,18 @@ type Query {
 - Network failure simulation
 - Idempotency verification
 
-### 12. Admin Dashboard
+### 10. Frontend Dashboard _(React SPA)_
 
-- System health monitoring
-- Real-time transaction feed
-- Configuration management (fees, rules, limits)
-- User and merchant management
-- Manual transaction override
-- Audit log viewer
-- Webhook management
-- API key rotation
+The frontend dashboard provides:
+
+- Real-time transaction feed (via WebSocket)
+- Payment processing interface
+- Transaction history and search
+- Merchant configuration
+- Simulator control panel
+- Health monitoring
+
+> **Note:** The frontend runs on port 3001 (Vite dev server) and communicates with the backend API on port 3000.
 
 ---
 
@@ -347,19 +273,19 @@ type Query {
 ```
 ┌──────────────────────────────────────────────────────────┐
 │                    CLIENT LAYER                          │
-│  ┌────────────┐  ┌────────────┐  ┌─────────────────┐   │
-│  │ Web UI     │  │ Mobile App │  │ API Client      │   │
-│  │ (React)    │  │ (Native)   │  │ (Postman/SDK)   │   │
-│  └──────┬─────┘  └──────┬─────┘  └────────┬────────┘   │
-└─────────┼────────────────┼─────────────────┼────────────┘
-          │                │                 │
-          └────────────────┼─────────────────┘
+│  ┌────────────┐  ┌────────────────┐  ┌──────────────┐  │
+│  │ Web UI     │  │ API Client     │  │  Swagger UI  │  │
+│  │ (React)    │  │ (Postman/cURL) │  │  (/docs)     │  │
+│  └──────┬─────┘  └───────┬────────┘  └──────┬───────┘  │
+└─────────┼────────────────┼──────────────────┼───────────┘
+          │                │                  │
+          └────────────────┼──────────────────┘
                            │
 ┌──────────────────────────▼────────────────────────────────┐
-│                   API GATEWAY LAYER                       │
+│                   API GATEWAY LAYER (Fastify)             │
 │  ┌──────────────────────────────────────────────────┐    │
-│  │  Authentication │ Rate Limiting │ Request Routing │    │
-│  │  CORS │ Request Validation │ Response Caching    │    │
+│  │  JWT Auth │ RBAC │ Rate Limiting │ Request Routing│    │
+│  │  CORS │ Helmet │ Request Validation              │    │
 │  └──────────────────────────────────────────────────┘    │
 └──────────────────────────┬────────────────────────────────┘
                            │
@@ -373,17 +299,27 @@ type Query {
 │  └───────────────┘  └─────────────┘  └────────────────┘ │
 │                                                            │
 │  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │   Customer    │  │   Wallet    │  │   Fraud        │ │
-│  │   Service     │  │   Service   │  │   Detection    │ │
+│  │   Customer    │  │   Webhook   │  │   Transaction  │ │
+│  │   Service     │  │   Service   │  │   Service      │ │
+│  └───────────────┘  └─────────────┘  └────────────────┘ │
+│                                                            │
+│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
+│  │   3D Secure   │  │   Auth      │  │   Circuit      │ │
+│  │   Service     │  │   Service   │  │   Breaker      │ │
+│  └───────────────┘  └─────────────┘  └────────────────┘ │
+│                                                            │
+│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
+│  │   Event       │  │   CQRS      │  │   WebSocket    │ │
+│  │   Store       │  │   Service   │  │   Service      │ │
 │  └───────────────┘  └─────────────┘  └────────────────┘ │
 └──────────────────────────┬────────────────────────────────┘
                            │
 ┌──────────────────────────▼────────────────────────────────┐
-│                  SUPPORT SERVICES LAYER                   │
+│                  GATEWAY ADAPTERS                         │
 │                                                            │
 │  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │ Notification  │  │  Reporting  │  │     Audit      │ │
-│  │   Service     │  │   Service   │  │    Service     │ │
+│  │    Stripe     │  │   PayPal    │  │   Razorpay     │ │
+│  │   Adapter     │  │   Adapter   │  │   Adapter      │ │
 │  └───────────────┘  └─────────────┘  └────────────────┘ │
 └──────────────────────────┬────────────────────────────────┘
                            │
@@ -393,15 +329,6 @@ type Query {
 │  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
 │  │  PostgreSQL   │  │    Redis    │  │   RabbitMQ     │ │
 │  │  (Primary DB) │  │   (Cache)   │  │    (Queue)     │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
-└────────────────────────────────────────────────────────────┘
-                           │
-┌──────────────────────────▼────────────────────────────────┐
-│                 EXTERNAL SIMULATORS                       │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │     Bank      │  │Card Network │  │Payment Gateway │ │
-│  │   Simulator   │  │  Simulator  │  │   Simulator    │ │
 │  └───────────────┘  └─────────────┘  └────────────────┘ │
 └────────────────────────────────────────────────────────────┘
 ```
@@ -434,12 +361,12 @@ type Query {
 
 ```
 Authorization Flow:
-Client → API Gateway → Payment Service → Simulator Engine → Bank Simulator
+Client → API Gateway → Payment Service → Gateway Adapter → Simulator Engine
 → Response → Payment Service → Database → Webhook Queue → Client
 
 Capture Flow:
 Client → API Gateway → Payment Service → Check Authorization
-→ Update State → Trigger Settlement → Webhook → Client
+→ Update State → Webhook → Client
 ```
 
 #### 3. Simulator Engine
@@ -465,25 +392,27 @@ Client → API Gateway → Payment Service → Check Authorization
 }
 ```
 
-#### 4. External Simulators
+#### 4. Gateway Adapters
 
-**Bank Simulator:**
+The platform uses an adapter pattern to simulate multiple payment gateways:
 
-- Simulates ACH/Wire transfer processing
-- Batch processing simulation
-- Settlement file generation
+**Stripe Adapter:**
 
-**Card Network Simulator:**
+- Stripe-like API request/response format
+- Test card number mapping
+- Authorization and capture flows
 
-- Visa/Mastercard authorization
-- 3DS authentication flow
-- Network tokenization
+**PayPal Adapter:**
 
-**Payment Gateway Simulator:**
+- PayPal-style order processing
+- Test card failure scenarios
 
-- Stripe-like API responses
-- PayPal OAuth flow
-- Apple Pay token validation
+**Razorpay Adapter:**
+
+- Razorpay-style payment processing
+- INR-focused test scenarios
+
+> All adapters share the same test card mappings to ensure consistent behavior regardless of selected gateway.
 
 ### Data Model
 
@@ -614,7 +543,7 @@ Content-Type: application/json
       "number": "4242424242424242",
       "exp_month": 12,
       "exp_year": 2027,
-      "cvc": "123"
+      "cvv": "123"
     }
   },
   "customer": "cus_xxxxx",
@@ -663,7 +592,7 @@ Content-Type: application/json
       "number": "4000000000000002",
       "exp_month": 12,
       "exp_year": 2027,
-      "cvc": "123"
+      "cvv": "123"
     }
   }
 }
@@ -732,13 +661,15 @@ Content-Type: application/json
 
 ### Frontend
 
-**Framework:** React 18+ with TypeScript
+**Framework:** React 19 with TypeScript
 
-- UI Library: Material-UI (MUI) or Ant Design
-- State Management: Redux Toolkit or Zustand
-- Charts: Recharts or Chart.js
-- Forms: React Hook Form + Zod validation
-- HTTP Client: Axios or React Query
+- UI Library: Material-UI (MUI) 5
+- State Management: Redux Toolkit
+- Charts: Recharts
+- Server State: TanStack React Query
+- HTTP Client: Fetch / Axios
+- WebSocket Client: Socket.IO Client
+- Routing: React Router 7
 
 ### ORM & Database Tools
 
@@ -1021,100 +952,7 @@ LIMIT 100;
 
 ---
 
-## 🗺️ Implementation Roadmap
-
-### Phase 1: Foundation (Weeks 1-2)
-
-**Goal:** Basic payment processing
-
-- [ ] Project setup (TypeScript, Fastify, Prisma)
-- [ ] Database schema design and migration
-- [ ] API Gateway with authentication
-- [ ] Payment Service core logic
-- [ ] Basic simulator engine
-- [ ] Test card number support
-- [ ] Unit tests for core functions
-
-**Deliverables:**
-
-- Create payment (authorize + capture)
-- Retrieve payment details
-- Basic success/failure scenarios
-
-### Phase 2: Core Features (Weeks 3-4)
-
-**Goal:** Complete payment lifecycle
-
-- [ ] Authorization-only flow
-- [ ] Capture authorized payments
-- [ ] Refund processing
-- [ ] Void transactions
-- [ ] Customer management
-- [ ] Payment method storage (tokenization)
-- [ ] Transaction search and filtering
-
-**Deliverables:**
-
-- Full payment CRUD operations
-- Customer and payment method APIs
-- Transaction history endpoint
-
-### Phase 3: Advanced Features (Weeks 5-6)
-
-**Goal:** Production-ready features
-
-- [ ] Webhook system (delivery + retries)
-- [ ] Notification service (email)
-- [ ] Fraud detection rules
-- [ ] Settlement processing
-- [ ] Multi-currency support
-- [ ] Idempotency handling
-- [ ] Rate limiting
-
-**Deliverables:**
-
-- Webhook configuration and delivery
-- Fraud rule engine
-- Settlement reports
-
-### Phase 4: Admin & Reporting (Weeks 7-8)
-
-**Goal:** Management interfaces
-
-- [ ] Admin dashboard (React)
-- [ ] Real-time transaction feed
-- [ ] Reporting service
-- [ ] Analytics dashboard
-- [ ] Configuration management UI
-- [ ] Audit log viewer
-
-**Deliverables:**
-
-- Working admin dashboard
-- Transaction analytics
-- Configurable simulator settings
-
-### Phase 5: Polish & Deploy (Weeks 9-10)
-
-**Goal:** Production deployment
-
-- [ ] Comprehensive testing (unit, integration, E2E)
-- [ ] API documentation (Swagger/OpenAPI)
-- [ ] Docker containerization
-- [ ] CI/CD pipeline setup
-- [ ] Monitoring and logging
-- [ ] Load testing
-- [ ] Security audit
-
-**Deliverables:**
-
-- Deployed application
-- Complete API documentation
-- Deployment guide
-
----
-
-## 🔒 Security Considerations
+##  Security Considerations
 
 ### 1. Data Protection
 
@@ -1178,7 +1016,7 @@ const PaymentSchema = z.object({
     number: z.string().regex(/^\d{13,19}$/),
     expMonth: z.number().min(1).max(12),
     expYear: z.number().min(2026),
-    cvc: z.string().regex(/^\d{3,4}$/),
+    cvv: z.string().regex(/^\d{3,4}$/),
   }),
 });
 ```
@@ -1229,16 +1067,17 @@ const limits = {
 │ /v1/payments/:id/void       │ POST   │ Void authorization       │
 │ /v1/transactions            │ GET    │ List transactions        │
 │ /v1/customers               │ POST   │ Create customer          │
+│ /v1/customers               │ GET    │ List customers           │
 │ /v1/customers/:id           │ GET    │ Retrieve customer        │
-│ /v1/payment-methods         │ POST   │ Add payment method       │
-│ /v1/payment-methods/:id     │ DELETE │ Remove payment method    │
-│ /v1/merchants/me            │ GET    │ Get merchant details     │
+│ /v1/merchants               │ GET    │ Get merchant details     │
 │ /v1/webhooks                │ POST   │ Create webhook endpoint  │
-│ /v1/webhooks/:id            │ PUT    │ Update webhook           │
-│ /v1/reports/transactions    │ GET    │ Transaction report       │
-│ /v1/reports/settlements     │ GET    │ Settlement report        │
+│ /v1/webhooks                │ GET    │ List webhooks            │
 │ /v1/simulator/config        │ GET    │ Get simulator config     │
 │ /v1/simulator/config        │ PUT    │ Update simulator config  │
+│ /v1/simulator/test          │ POST   │ Run simulator test       │
+│ /health                     │ GET    │ Health check             │
+│ /health/detailed            │ GET    │ Detailed health check    │
+│ /docs                       │ GET    │ Swagger UI               │
 └─────────────────────────────┴────────┴──────────────────────────┘
 ```
 
@@ -1305,22 +1144,14 @@ GET /v1/transactions?status=succeeded&amount[gte]=1000&created_at[gte]=2026-01-0
 
 ### Documentation
 
-- API Reference: `/docs/api`
-- Integration Guide: `/docs/integration`
-- Test Data: `/docs/testing`
-- Webhooks: `/docs/webhooks`
-
-### Example Implementations
-
-- Node.js Example: `/examples/nodejs`
-- React Integration: `/examples/react`
-- Python Client: `/examples/python`
+- **API Reference**: Available at `/docs` (Swagger UI) when server is running
+- **Quick Start**: See [QUICKSTART.md](./QUICKSTART.md)
+- **Deployment Guide**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
 
 ### Support
 
-- GitHub Issues: For bug reports
-- Discussion Forum: For questions
-- Email: support@payment-simulator.dev
+- **GitHub Issues**: For bug reports and feature requests
+- **GitHub Discussions**: For questions and community support
 
 ---
 
@@ -1331,5 +1162,5 @@ MIT License - Free to use for educational and commercial purposes.
 ---
 
 **Document Version:** 1.0.0  
-**Last Updated:** February 14, 2026  
-**Status:** ✅ Ready for Implementation
+**Last Updated:** February 15, 2026  
+**Status:** ✅ v1.0 Released
