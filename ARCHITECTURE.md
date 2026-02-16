@@ -1,14 +1,14 @@
 # Payment Platform Simulator - Architecture & Documentation
 
-> **Version:** 1.0.0  
-> **Last Updated:** February 15, 2026  
+> **Version:** 1.0.0 
+> **Last Updated:** February 15, 2026 
 > **Status:** Production Ready
 
-**🎯 NOTE:** This document describes the architecture and implemented features of the Payment Platform Simulator.
+** NOTE:** This document describes the architecture and implemented features of the Payment Platform Simulator.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 2. [Core Functionalities](#core-functionalities)
@@ -20,7 +20,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 ### Purpose
 
@@ -44,7 +44,7 @@ The **Payment Platform Simulator** is a comprehensive testing and development en
 
 ---
 
-## 🚀 Core Functionalities
+## Core Functionalities
 
 ### 1. Payment Processing Simulation
 
@@ -59,14 +59,14 @@ The **Payment Platform Simulator** is a comprehensive testing and development en
 
 ```
 ┌─────────────────┬──────────────────────────────────────┐
-│ Operation       │ Description                          │
+│ Operation │ Description │
 ├─────────────────┼──────────────────────────────────────┤
-│ Authorize       │ Hold funds without capture           │
-│ Capture         │ Complete authorized payment          │
-│ Auth + Capture  │ Single-step payment                  │
-│ Refund          │ Return funds (full or partial)       │
-│ Void            │ Cancel before settlement             │
-│ Chargeback      │ Simulate dispute process             │
+│ Authorize │ Hold funds without capture │
+│ Capture │ Complete authorized payment │
+│ Auth + Capture │ Single-step payment │
+│ Refund │ Return funds (full or partial) │
+│ Void │ Cancel before settlement │
+│ Chargeback │ Simulate dispute process │
 └─────────────────┴──────────────────────────────────────┘
 ```
 
@@ -82,18 +82,18 @@ The **Payment Platform Simulator** is a comprehensive testing and development en
 
 ```
 ┌──────────────────────────┬──────────┬─────────────────────────┐
-│ Scenario                 │ Code     │ Description             │
+│ Scenario │ Code │ Description │
 ├──────────────────────────┼──────────┼─────────────────────────┤
-│ Insufficient Funds       │ 51       │ Not enough balance      │
-│ Card Declined            │ 05       │ Generic decline         │
-│ Expired Card             │ 54       │ Card past expiry        │
-│ Invalid Card Number      │ 14       │ Invalid PAN             │
-│ Network Timeout          │ 68       │ Connection timeout      │
-│ Gateway Error            │ 96       │ System malfunction      │
-│ Fraud Detected           │ 59       │ Suspected fraud         │
-│ Limit Exceeded           │ 61       │ Amount limit exceeded   │
-│ Invalid CVV              │ N7       │ CVV mismatch            │
-│ Stolen Card              │ 43       │ Card reported stolen    │
+│ Insufficient Funds │ 51 │ Not enough balance │
+│ Card Declined │ 05 │ Generic decline │
+│ Expired Card │ 54 │ Card past expiry │
+│ Invalid Card Number │ 14 │ Invalid PAN │
+│ Network Timeout │ 68 │ Connection timeout │
+│ Gateway Error │ 96 │ System malfunction │
+│ Fraud Detected │ 59 │ Suspected fraud │
+│ Limit Exceeded │ 61 │ Amount limit exceeded │
+│ Invalid CVV │ N7 │ CVV mismatch │
+│ Stolen Card │ 43 │ Card reported stolen │
 └──────────────────────────┴──────────┴─────────────────────────┘
 ```
 
@@ -204,24 +204,24 @@ simulator_config:
 #### REST API
 
 ```
-POST   /v1/payments
-GET    /v1/payments/:id
-POST   /v1/payments/:id/capture
-POST   /v1/payments/:id/refund
-POST   /v1/payments/:id/void
-GET    /v1/transactions
-GET    /v1/merchants
-POST   /v1/customers
-GET    /v1/customers
-GET    /v1/customers/:id
-POST   /v1/webhooks
-GET    /v1/webhooks
-GET    /v1/simulator/config
-PUT    /v1/simulator/config
-POST   /v1/simulator/test
-GET    /health
-GET    /health/detailed
-GET    /docs              (Swagger UI)
+POST /v1/payments
+GET /v1/payments/:id
+POST /v1/payments/:id/capture
+POST /v1/payments/:id/refund
+POST /v1/payments/:id/void
+GET /v1/transactions
+GET /v1/merchants
+POST /v1/customers
+GET /v1/customers
+GET /v1/customers/:id
+POST /v1/webhooks
+GET /v1/webhooks
+GET /v1/simulator/config
+PUT /v1/simulator/config
+POST /v1/simulator/test
+GET /health
+GET /health/detailed
+GET /docs (Swagger UI)
 ```
 
 ### 9. Testing Features
@@ -230,16 +230,16 @@ GET    /docs              (Swagger UI)
 
 ```
 ┌─────────────────────┬────────────────────┬─────────────────┐
-│ Card Number         │ Brand              │ Expected Result │
+│ Card Number │ Brand │ Expected Result │
 ├─────────────────────┼────────────────────┼─────────────────┤
-│ 4242424242424242    │ Visa               │ Success         │
-│ 5555555555554444    │ Mastercard         │ Success         │
-│ 378282246310005     │ American Express   │ Success         │
-│ 4000000000000002    │ Visa               │ Declined        │
-│ 4000000000009995    │ Visa               │ Insufficient    │
-│ 4000000000000069    │ Visa               │ Expired Card    │
-│ 4000000000000127    │ Visa               │ Invalid CVV     │
-│ 4000000000000119    │ Visa               │ Generic Decline│
+│ 4242424242424242 │ Visa │ Success │
+│ 5555555555554444 │ Mastercard │ Success │
+│ 378282246310005 │ American Express │ Success │
+│ 4000000000000002 │ Visa │ Declined │
+│ 4000000000009995 │ Visa │ Insufficient │
+│ 4000000000000069 │ Visa │ Expired Card │
+│ 4000000000000127 │ Visa │ Invalid CVV │
+│ 4000000000000119 │ Visa │ Generic Decline│
 └─────────────────────┴────────────────────┴─────────────────┘
 ```
 
@@ -266,70 +266,70 @@ The frontend dashboard provides:
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ### High-Level Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                    CLIENT LAYER                          │
-│  ┌────────────┐  ┌────────────────┐  ┌──────────────┐  │
-│  │ Web UI     │  │ API Client     │  │  Swagger UI  │  │
-│  │ (React)    │  │ (Postman/cURL) │  │  (/docs)     │  │
-│  └──────┬─────┘  └───────┬────────┘  └──────┬───────┘  │
+│ CLIENT LAYER │
+│ ┌────────────┐ ┌────────────────┐ ┌──────────────┐ │
+│ │ Web UI │ │ API Client │ │ Swagger UI │ │
+│ │ (React) │ │ (Postman/cURL) │ │ (/docs) │ │
+│ └──────┬─────┘ └───────┬────────┘ └──────┬───────┘ │
 └─────────┼────────────────┼──────────────────┼───────────┘
-          │                │                  │
+          │ │ │
           └────────────────┼──────────────────┘
                            │
 ┌──────────────────────────▼────────────────────────────────┐
-│                   API GATEWAY LAYER (Fastify)             │
-│  ┌──────────────────────────────────────────────────┐    │
-│  │  JWT Auth │ RBAC │ Rate Limiting │ Request Routing│    │
-│  │  CORS │ Helmet │ Request Validation              │    │
-│  └──────────────────────────────────────────────────┘    │
+│ API GATEWAY LAYER (Fastify) │
+│ ┌──────────────────────────────────────────────────┐ │
+│ │ JWT Auth │ RBAC │ Rate Limiting │ Request Routing│ │
+│ │ CORS │ Helmet │ Request Validation │ │
+│ └──────────────────────────────────────────────────┘ │
 └──────────────────────────┬────────────────────────────────┘
                            │
 ┌──────────────────────────▼────────────────────────────────┐
-│                  CORE SERVICES LAYER                      │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │   Payment     │  │  Simulator  │  │   Merchant     │ │
-│  │   Service     │◄─┤   Engine    │  │   Service      │ │
-│  │               │  │             │  │                │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │   Customer    │  │   Webhook   │  │   Transaction  │ │
-│  │   Service     │  │   Service   │  │   Service      │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │   3D Secure   │  │   Auth      │  │   Circuit      │ │
-│  │   Service     │  │   Service   │  │   Breaker      │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │   Event       │  │   CQRS      │  │   WebSocket    │ │
-│  │   Store       │  │   Service   │  │   Service      │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
+│ CORE SERVICES LAYER │
+│ │
+│ ┌───────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│ │ Payment │ │ Simulator │ │ Merchant │ │
+│ │ Service │◄─┤ Engine │ │ Service │ │
+│ │ │ │ │ │ │ │
+│ └───────────────┘ └─────────────┘ └────────────────┘ │
+│ │
+│ ┌───────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│ │ Customer │ │ Webhook │ │ Transaction │ │
+│ │ Service │ │ Service │ │ Service │ │
+│ └───────────────┘ └─────────────┘ └────────────────┘ │
+│ │
+│ ┌───────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│ │ 3D Secure │ │ Auth │ │ Circuit │ │
+│ │ Service │ │ Service │ │ Breaker │ │
+│ └───────────────┘ └─────────────┘ └────────────────┘ │
+│ │
+│ ┌───────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│ │ Event │ │ CQRS │ │ WebSocket │ │
+│ │ Store │ │ Service │ │ Service │ │
+│ └───────────────┘ └─────────────┘ └────────────────┘ │
 └──────────────────────────┬────────────────────────────────┘
                            │
 ┌──────────────────────────▼────────────────────────────────┐
-│                  GATEWAY ADAPTERS                         │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │    Stripe     │  │   PayPal    │  │   Razorpay     │ │
-│  │   Adapter     │  │   Adapter   │  │   Adapter      │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
+│ GATEWAY ADAPTERS │
+│ │
+│ ┌───────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│ │ Stripe │ │ PayPal │ │ Razorpay │ │
+│ │ Adapter │ │ Adapter │ │ Adapter │ │
+│ └───────────────┘ └─────────────┘ └────────────────┘ │
 └──────────────────────────┬────────────────────────────────┘
                            │
 ┌──────────────────────────▼────────────────────────────────┐
-│                      DATA LAYER                           │
-│                                                            │
-│  ┌───────────────┐  ┌─────────────┐  ┌────────────────┐ │
-│  │  PostgreSQL   │  │    Redis    │  │   RabbitMQ     │ │
-│  │  (Primary DB) │  │   (Cache)   │  │    (Queue)     │ │
-│  └───────────────┘  └─────────────┘  └────────────────┘ │
+│ DATA LAYER │
+│ │
+│ ┌───────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│ │ PostgreSQL │ │ Redis │ │ RabbitMQ │ │
+│ │ (Primary DB) │ │ (Cache) │ │ (Queue) │ │
+│ └───────────────┘ └─────────────┘ └────────────────┘ │
 └────────────────────────────────────────────────────────────┘
 ```
 
@@ -618,7 +618,7 @@ Content-Type: application/json
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 ### Backend
 
@@ -630,11 +630,11 @@ Content-Type: application/json
 
 **Why This Stack?**
 
-- ✅ Excellent async I/O for payment processing
-- ✅ Strong typing for financial data safety
-- ✅ Large ecosystem for payment integrations
-- ✅ Fast development cycle
-- ✅ 10x faster than Express in benchmarks
+- Excellent async I/O for payment processing
+- Strong typing for financial data safety
+- Large ecosystem for payment integrations
+- Fast development cycle
+- 10x faster than Express in benchmarks
 
 ### Database Layer
 
@@ -683,16 +683,16 @@ Content-Type: application/json
 ```typescript
 // Example Prisma Model
 model Transaction {
-  id              String   @id @default(uuid())
-  merchantId      String
-  amount          Decimal  @db.Decimal(12, 2)
-  currency        String   @default("USD")
-  status          String
-  authCode        String?
-  createdAt       DateTime @default(now())
+  id String @id @default(uuid())
+  merchantId String
+  amount Decimal @db.Decimal(12, 2)
+  currency String @default("USD")
+  status String
+  authCode String?
+  createdAt DateTime @default(now())
 
-  merchant        Merchant @relation(fields: [merchantId], references: [id])
-  events          TransactionEvent[]
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+  events TransactionEvent[]
 }
 ```
 
@@ -751,7 +751,7 @@ model Transaction {
 
 ---
 
-## 💡 Key Insights
+## Key Insights
 
 ### 1. Idempotency is Critical
 
@@ -774,8 +774,8 @@ if (await redis.exists(`idempotency:${key}`)) {
 
 ```
 pending → authorized → captured → settled
-          ↓           ↓
-        failed      refunded
+          ↓ ↓
+        failed refunded
                       ↓
                    settled
 ```
@@ -789,13 +789,13 @@ pending → authorized → captured → settled
 
 ### 3. Money Representation
 
-**❌ Wrong:**
+** Wrong:**
 
 ```javascript
 const amount = 19.99; // Floating point issues
 ```
 
-**✅ Correct:**
+** Correct:**
 
 ```javascript
 const amount = 1999; // Store as cents (integer)
@@ -826,8 +826,8 @@ const amount = new Decimal('19.99');
 logger.info({
   transactionId: tx.id,
   amount: tx.amount,
-  // ❌ card: tx.card,  // Never log full card
-  last4: tx.card.last4, // ✅ Only last 4 digits
+  // card: tx.card, // Never log full card
+  last4: tx.card.last4, // Only last 4 digits
 });
 
 // Always use parameterized queries
@@ -843,8 +843,8 @@ await db.save({ cardToken: encrypted });
 ```typescript
 // Per API key
 {
-  points: 1000,  // 1000 requests
-  duration: 60   // per 60 seconds
+  points: 1000, // 1000 requests
+  duration: 60 // per 60 seconds
 }
 
 // Per IP (unauthenticated)
@@ -856,7 +856,7 @@ await db.save({ cardToken: encrypted });
 // Burst protection
 {
   points: 10,
-  duration: 1    // max 10 req per second
+  duration: 1 // max 10 req per second
 }
 ```
 
@@ -915,10 +915,10 @@ CREATE INDEX idx_transactions_lookup ON transactions(merchant_id, created_at DES
 **Query Optimization:**
 
 ```sql
--- ❌ Slow: Full table scan
+-- Slow: Full table scan
 SELECT * FROM transactions WHERE created_at > NOW() - INTERVAL '30 days';
 
--- ✅ Fast: Index-optimized with LIMIT
+-- Fast: Index-optimized with LIMIT
 SELECT * FROM transactions
 WHERE merchant_id = $1
   AND created_at > $2
@@ -952,7 +952,7 @@ LIMIT 100;
 
 ---
 
-##  Security Considerations
+## Security Considerations
 
 ### 1. Data Protection
 
@@ -971,7 +971,7 @@ const token = generateSecureToken();
 await db.paymentMethod.create({
   token: token,
   last4: cardNumber.slice(-4),
-  // ❌ Never store: cardNumber, cvv
+  // Never store: cardNumber, cvv
 });
 ```
 
@@ -980,9 +980,9 @@ await db.paymentMethod.create({
 **API Key Format:**
 
 ```
-Test Key:  sk_test_xxxxxxxxxxxxxxxx
-Live Key:  sk_live_xxxxxxxxxxxxxxxx
-Public:    pk_test_xxxxxxxxxxxxxxxx
+Test Key: sk_test_xxxxxxxxxxxxxxxx
+Live Key: sk_live_xxxxxxxxxxxxxxxx
+Public: pk_test_xxxxxxxxxxxxxxxx
 ```
 
 **Key Rotation:**
@@ -1036,11 +1036,11 @@ const limits = {
 
 **What to Log:**
 
-- ✅ Request metadata (IP, user agent, timestamp)
-- ✅ Transaction IDs
-- ✅ Status changes
-- ✅ Error codes
-- ❌ Never log: card numbers, CVV, passwords, API keys
+- Request metadata (IP, user agent, timestamp)
+- Transaction IDs
+- Status changes
+- Error codes
+- Never log: card numbers, CVV, passwords, API keys
 
 **Monitoring Alerts:**
 
@@ -1052,32 +1052,32 @@ const limits = {
 
 ---
 
-## 🔌 API Design
+## API Design
 
 ### RESTful Endpoints
 
 ```
 ┌─────────────────────────────┬────────┬──────────────────────────┐
-│ Endpoint                    │ Method │ Description              │
+│ Endpoint │ Method │ Description │
 ├─────────────────────────────┼────────┼──────────────────────────┤
-│ /v1/payments                │ POST   │ Create payment           │
-│ /v1/payments/:id            │ GET    │ Retrieve payment         │
-│ /v1/payments/:id/capture    │ POST   │ Capture authorization    │
-│ /v1/payments/:id/refund     │ POST   │ Refund payment           │
-│ /v1/payments/:id/void       │ POST   │ Void authorization       │
-│ /v1/transactions            │ GET    │ List transactions        │
-│ /v1/customers               │ POST   │ Create customer          │
-│ /v1/customers               │ GET    │ List customers           │
-│ /v1/customers/:id           │ GET    │ Retrieve customer        │
-│ /v1/merchants               │ GET    │ Get merchant details     │
-│ /v1/webhooks                │ POST   │ Create webhook endpoint  │
-│ /v1/webhooks                │ GET    │ List webhooks            │
-│ /v1/simulator/config        │ GET    │ Get simulator config     │
-│ /v1/simulator/config        │ PUT    │ Update simulator config  │
-│ /v1/simulator/test          │ POST   │ Run simulator test       │
-│ /health                     │ GET    │ Health check             │
-│ /health/detailed            │ GET    │ Detailed health check    │
-│ /docs                       │ GET    │ Swagger UI               │
+│ /v1/payments │ POST │ Create payment │
+│ /v1/payments/:id │ GET │ Retrieve payment │
+│ /v1/payments/:id/capture │ POST │ Capture authorization │
+│ /v1/payments/:id/refund │ POST │ Refund payment │
+│ /v1/payments/:id/void │ POST │ Void authorization │
+│ /v1/transactions │ GET │ List transactions │
+│ /v1/customers │ POST │ Create customer │
+│ /v1/customers │ GET │ List customers │
+│ /v1/customers/:id │ GET │ Retrieve customer │
+│ /v1/merchants │ GET │ Get merchant details │
+│ /v1/webhooks │ POST │ Create webhook endpoint │
+│ /v1/webhooks │ GET │ List webhooks │
+│ /v1/simulator/config │ GET │ Get simulator config │
+│ /v1/simulator/config │ PUT │ Update simulator config │
+│ /v1/simulator/test │ POST │ Run simulator test │
+│ /health │ GET │ Health check │
+│ /health/detailed │ GET │ Detailed health check │
+│ /docs │ GET │ Swagger UI │
 └─────────────────────────────┴────────┴──────────────────────────┘
 ```
 
@@ -1140,7 +1140,7 @@ GET /v1/transactions?status=succeeded&amount[gte]=1000&created_at[gte]=2026-01-0
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 ### Documentation
 
@@ -1155,12 +1155,12 @@ GET /v1/transactions?status=succeeded&amount[gte]=1000&created_at[gte]=2026-01-0
 
 ---
 
-## 📝 License
+## License
 
 MIT License - Free to use for educational and commercial purposes.
 
 ---
 
-**Document Version:** 1.0.0  
-**Last Updated:** February 15, 2026  
-**Status:** ✅ v1.0 Released
+**Document Version:** 1.0.0 
+**Last Updated:** February 15, 2026 
+**Status:** v1.0 Released

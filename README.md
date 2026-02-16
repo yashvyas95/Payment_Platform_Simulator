@@ -19,25 +19,25 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Executive Summary](#-executive-summary)
-- [Problem Statement & Solution](#-problem-statement--solution)
-- [Feature Overview](#-feature-overview)
-- [Architecture (HLD)](#-architecture-high-level-design)
-- [Low-Level Design (LLD)](#-low-level-design-lld)
-- [Architecture Decision Records (ADR)](#-architecture-decision-records-adr)
-- [Tech Stack](#-tech-stack)
-- [Quick Start](#-quick-start)
-- [API Documentation](#-api-documentation)
-- [Testing Strategy](#-testing-strategy)
-- [Key Insights](#-key-insights--lessons-learned)
-- [Deployment](#-deployment)
-- [Contributing](#-contributing)
+- [Executive Summary](#executive-summary)
+- [Problem Statement & Solution](#problem-statement--solution)
+- [Feature Overview](#feature-overview)
+- [Architecture (HLD)](#architecture-high-level-design)
+- [Low-Level Design (LLD)](#low-level-design-lld)
+- [Architecture Decision Records (ADR)](#architecture-decision-records-adr)
+- [Tech Stack](#tech-stack)
+- [Quick Start](#quick-start)
+- [API Documentation](#api-documentation)
+- [Testing Strategy](#testing-strategy)
+- [Key Insights](#key-insights--lessons-learned)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
 
 ---
 
-## 🎯 Executive Summary
+## Executive Summary
 
 **Payment Platform Simulator** is a production-ready payment processing system that demonstrates enterprise-grade architecture patterns, security best practices, and scalable design principles. Built to serve as both a **learning resource** for developers and a **reference implementation** for production payment systems.
 
@@ -51,39 +51,39 @@
 | **Services**              | 13 independent services                                                                       |
 | **API Endpoints**         | 19 RESTful routes                                                                             |
 | **Database Models**       | 15 Prisma models                                                                              |
-| **Real-time Support**     | ✅ WebSocket (@fastify/websocket)                                                             |
-| **Multi-Gateway**         | ✅ Stripe, PayPal, Razorpay                                                                   |
-| **Security**              | ✅ JWT + RBAC + 3DS                                                                           |
+| **Real-time Support**     | WebSocket (@fastify/websocket)                                                                |
+| **Multi-Gateway**         | Stripe, PayPal, Razorpay                                                                      |
+| **Security**              | JWT + RBAC + 3DS                                                                              |
 
 ---
 
-## 🚨 Problem Statement & Solution
+## Problem Statement & Solution
 
 ### The Problem
 
 **Payment integration in modern applications is deceptively complex:**
 
-1. **Testing Cost** 💸
+1. **Testing Cost**
    - Live gateway sandbox accounts required
    - Transaction fees even in test mode
    - Limited test scenarios available
 
-2. **Edge Case Simulation** ⚠️
+2. **Edge Case Simulation**
    - Difficult to test failures (timeouts, declines, fraud)
    - Cannot simulate gateway outages
    - Race conditions hard to reproduce
 
-3. **Compliance & Security** 🔒
+3. **Compliance & Security**
    - PCI DSS compliance requirements
    - 3D Secure (SCA) mandatory in EU
    - Audit trail requirements
 
-4. **Resilience Testing** 🔄
+4. **Resilience Testing**
    - Retry logic validation
    - Idempotency enforcement
    - Circuit breaker behavior
 
-5. **Multi-Gateway Support** 🌐
+5. **Multi-Gateway Support**
    - Different APIs per provider
    - Failover strategies needed
    - Vendor lock-in risk
@@ -92,20 +92,20 @@
 
 **A complete payment simulator that:**
 
-✅ **Zero Cost Testing** - Simulate all scenarios without live gateways  
-✅ **Deterministic Scenarios** - Test cards produce predictable outcomes  
-✅ **Production Patterns** - Implements real-world architecture (Event Sourcing, CQRS, Circuit Breaker)  
-✅ **Security First** - JWT rotation, RBAC, 3DS flows, PCI DSS patterns  
-✅ **Multi-Gateway** - Unified interface for Stripe/PayPal/Razorpay  
-✅ **Real-time Updates** - WebSocket notifications  
-✅ **Complete Audit Trail** - Event sourcing for compliance  
-✅ **Educational** - Clean code with extensive documentation
+**Zero Cost Testing** - Simulate all scenarios without live gateways
+**Deterministic Scenarios** - Test cards produce predictable outcomes
+**Production Patterns** - Implements real-world architecture (Event Sourcing, CQRS, Circuit Breaker)
+**Security First** - JWT rotation, RBAC, 3DS flows, PCI DSS patterns
+**Multi-Gateway** - Unified interface for Stripe/PayPal/Razorpay
+**Real-time Updates** - WebSocket notifications
+**Complete Audit Trail** - Event sourcing for compliance
+**Educational** - Clean code with extensive documentation
 
 ---
 
-## ✨ Feature Overview
+## Feature Overview
 
-### 🔐 Authentication & Authorization
+### Authentication & Authorization
 
 #### JWT Refresh Token Rotation
 
@@ -129,17 +129,17 @@
 
 ---
 
-### 💳 Payment Gateway Integration
+### Payment Gateway Integration
 
 #### Multi-Gateway Adapters (Strategy Pattern)
 
 - **Unified Interface**: `PaymentGatewayInterface` for all gateways
 - **Runtime Selection**: Dynamic gateway choosing via Factory pattern
 - **Supported Gateways**:
-  - ✅ **Stripe** - Full test card support
-  - ✅ **PayPal** - OAuth flow simulation
-  - ✅ **Razorpay** - UPI + Card support
-  - ✅ **Simulator** - Deterministic test mode
+  - **Stripe** - Full test card support
+  - **PayPal** - OAuth flow simulation
+  - **Razorpay** - UPI + Card support
+  - **Simulator** - Deterministic test mode
 
 **Operations Supported**:
 
@@ -159,7 +159,7 @@
 
 ---
 
-### 🛡️ 3D Secure Authentication (3DS 2.0)
+### 3D Secure Authentication (3DS 2.0)
 
 **Complete SCA (Strong Customer Authentication) Flow**:
 
@@ -180,7 +180,7 @@
 
 ---
 
-### ⚡ Resilience Patterns
+### Resilience Patterns
 
 #### Circuit Breaker
 
@@ -209,7 +209,7 @@
 
 ---
 
-### 📊 Event Sourcing Architecture
+### Event Sourcing Architecture
 
 **Immutable event log for complete audit trail**
 
@@ -245,7 +245,7 @@ TRANSACTION_UPDATED;
 
 ---
 
-### 🔄 CQRS (Command Query Responsibility Segregation)
+### CQRS (Command Query Responsibility Segregation)
 
 **Separate read and write models for optimal performance**
 
@@ -275,7 +275,7 @@ TRANSACTION_UPDATED;
 
 ---
 
-### 🔴 Real-Time Communication
+### Real-Time Communication
 
 #### WebSocket Service
 
@@ -303,7 +303,7 @@ TRANSACTION_UPDATED;
 
 ---
 
-### 🎨 Frontend Architecture
+### Frontend Architecture
 
 #### State Management
 
@@ -334,7 +334,7 @@ TRANSACTION_UPDATED;
 
 ---
 
-### 🧪 Testing Infrastructure
+### Testing Infrastructure
 
 **Current Status**: 165 passing tests across 29 suites (~80% line coverage)
 
@@ -381,77 +381,77 @@ TRANSACTION_UPDATED;
 
 ---
 
-## 🏗️ Architecture (High-Level Design)
+## Architecture (High-Level Design)
 
 ### System Context Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         External Actors                              │
-│                                                                       │
-│  ┌──────────┐      ┌───────────┐      ┌──────────────────────┐     │
-│  │ End User │      │ Merchant  │      │ System Administrator │     │
-│  └────┬─────┘      └─────┬─────┘      └──────────┬───────────┘     │
+│ External Actors │
+│ │
+│ ┌──────────┐ ┌───────────┐ ┌──────────────────────┐ │
+│ │ End User │ │ Merchant │ │ System Administrator │ │
+│ └────┬─────┘ └─────┬─────┘ └──────────┬───────────┘ │
 └───────┼──────────────────┼──────────────────────┼───────────────────┘
-        │                  │                       │
-        ▼                  ▼                       ▼
+        │ │ │
+        ▼ ▼ ▼
 ┌────────────────────────────────────────────────────────────────────┐
-│                      API Gateway Layer                              │
-│  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ Fastify + Plugins                                            │  │
-│  │ • CORS  • Helmet  • Rate Limiting  • JWT Auth  • Swagger    │  │
-│  └──────────────────────────────────────────────────────────────┘  │
+│ API Gateway Layer │
+│ ┌──────────────────────────────────────────────────────────────┐ │
+│ │ Fastify + Plugins │ │
+│ │ • CORS • Helmet • Rate Limiting • JWT Auth • Swagger │ │
+│ └──────────────────────────────────────────────────────────────┘ │
 └───────────┬────────────────────────────────────────────────────────┘
             │
 ┌───────────┼────────────────────────────────────────────────────────┐
-│           ▼            Application Layer (Services)                 │
-│                                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │   Payment    │  │ Transaction  │  │   Authentication         │ │
-│  │   Service    │  │   Service    │  │   Service (JWT+RBAC)     │ │
-│  └──────┬───────┘  └──────┬───────┘  └──────────┬───────────────┘ │
-│         │                 │                       │                 │
-│  ┌──────▼───────┐  ┌──────▼───────┐  ┌──────────▼───────────────┐ │
-│  │  Simulator   │  │   Customer   │  │    Merchant              │ │
-│  │   Engine     │  │   Service    │  │    Service               │ │
-│  └──────────────┘  └──────────────┘  └──────────────────────────┘ │
-│                                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │  WebSocket   │  │   Webhook    │  │    Event Store           │ │
-│  │  Service     │  │   Service    │  │    Service               │ │
-│  └──────────────┘  └──────────────┘  └──────────────────────────┘ │
-│                                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │ Circuit      │  │    CQRS      │  │   3D Secure              │ │
-│  │ Breaker      │  │    Query     │  │   Service                │ │
-│  └──────────────┘  └──────────────┘  └──────────────────────────┘ │
+│ ▼ Application Layer (Services) │
+│ │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────────────────┐ │
+│ │ Payment │ │ Transaction │ │ Authentication │ │
+│ │ Service │ │ Service │ │ Service (JWT+RBAC) │ │
+│ └──────┬───────┘ └──────┬───────┘ └──────────┬───────────────┘ │
+│ │ │ │ │
+│ ┌──────▼───────┐ ┌──────▼───────┐ ┌──────────▼───────────────┐ │
+│ │ Simulator │ │ Customer │ │ Merchant │ │
+│ │ Engine │ │ Service │ │ Service │ │
+│ └──────────────┘ └──────────────┘ └──────────────────────────┘ │
+│ │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────────────────┐ │
+│ │ WebSocket │ │ Webhook │ │ Event Store │ │
+│ │ Service │ │ Service │ │ Service │ │
+│ └──────────────┘ └──────────────┘ └──────────────────────────┘ │
+│ │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────────────────┐ │
+│ │ Circuit │ │ CQRS │ │ 3D Secure │ │
+│ │ Breaker │ │ Query │ │ Service │ │
+│ └──────────────┘ └──────────────┘ └──────────────────────────┘ │
 └───────────┬────────────────────────────────────────────────────────┘
             │
 ┌───────────┼────────────────────────────────────────────────────────┐
-│           ▼           Infrastructure Layer                          │
-│                                                                      │
-│  ┌────────────────┐  ┌────────────────┐  ┌───────────────────────┐│
-│  │  PostgreSQL 15 │  │    Redis 7     │  │   RabbitMQ 3.12      ││
-│  │  (Primary DB)  │  │    (Cache)     │  │   (Message Queue)    ││
-│  │  • Prisma ORM  │  │  • Sessions    │  │   • Webhooks         ││
-│  │  • Migrations  │  │  • Rate Limit  │  │   • Async Tasks      ││
-│  └────────────────┘  └────────────────┘  └───────────────────────┘│
+│ ▼ Infrastructure Layer │
+│ │
+│ ┌────────────────┐ ┌────────────────┐ ┌───────────────────────┐│
+│ │ PostgreSQL 15 │ │ Redis 7 │ │ RabbitMQ 3.12 ││
+│ │ (Primary DB) │ │ (Cache) │ │ (Message Queue) ││
+│ │ • Prisma ORM │ │ • Sessions │ │ • Webhooks ││
+│ │ • Migrations │ │ • Rate Limit │ │ • Async Tasks ││
+│ └────────────────┘ └────────────────┘ └───────────────────────┘│
 └────────────────────────────────────────────────────────────────────┘
             │
 ┌───────────┼────────────────────────────────────────────────────────┐
-│           ▼         Payment Gateway Adapters                        │
-│                                                                      │
-│  ┌────────────────┐  ┌────────────────┐  ┌───────────────────────┐│
-│  │     Stripe     │  │     PayPal     │  │      Razorpay         ││
-│  │    Adapter     │  │    Adapter     │  │      Adapter          ││
-│  └────────────────┘  └────────────────┘  └───────────────────────┘│
-│           │                  │                      │               │
-│           └──────────────────┴──────────────────────┘               │
-│                              │                                      │
-│                   ┌──────────▼──────────┐                          │
-│                   │  Gateway Factory    │                          │
-│                   │  (Strategy Pattern) │                          │
-│                   └─────────────────────┘                          │
+│ ▼ Payment Gateway Adapters │
+│ │
+│ ┌────────────────┐ ┌────────────────┐ ┌───────────────────────┐│
+│ │ Stripe │ │ PayPal │ │ Razorpay ││
+│ │ Adapter │ │ Adapter │ │ Adapter ││
+│ └────────────────┘ └────────────────┘ └───────────────────────┘│
+│ │ │ │ │
+│ └──────────────────┴──────────────────────┘ │
+│ │ │
+│ ┌──────────▼──────────┐ │
+│ │ Gateway Factory │ │
+│ │ (Strategy Pattern) │ │
+│ └─────────────────────┘ │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -459,137 +459,137 @@ TRANSACTION_UPDATED;
 
 ```
 ┌──────────┐
-│  Client  │
+│ Client │
 └────┬─────┘
      │ 1. POST /v1/payments
      ▼
 ┌────────────────────┐
-│ API Gateway        │ 2. Validate JWT + Rate Limit
-│ (Fastify)          │
+│ API Gateway │ 2. Validate JWT + Rate Limit
+│ (Fastify) │
 └────┬───────────────┘
      │ 3. Route to Payment Service
      ▼
 ┌────────────────────┐
-│ Payment Service    │ 4. Create transaction record
+│ Payment Service │ 4. Create transaction record
 └────┬───────────────┘
      │ 5. Append PAYMENT_INITIATED event
      ▼
 ┌────────────────────┐
-│ Event Store        │ 6. Store immutable event
+│ Event Store │ 6. Store immutable event
 └────┬───────────────┘
      │ 7. Get gateway via Factory
      ▼
 ┌────────────────────┐
-│ Gateway Factory    │ 8. Return Stripe/PayPal/Razorpay adapter
+│ Gateway Factory │ 8. Return Stripe/PayPal/Razorpay adapter
 └────┬───────────────┘
      │ 9. Execute with Circuit Breaker
      ▼
 ┌────────────────────┐
-│ Circuit Breaker    │ 10. Check state (CLOSED/OPEN/HALF_OPEN)
+│ Circuit Breaker │ 10. Check state (CLOSED/OPEN/HALF_OPEN)
 └────┬───────────────┘
      │ 11. If CLOSED, proceed
      ▼
 ┌────────────────────┐
-│ Stripe Adapter     │ 12. Process payment
+│ Stripe Adapter │ 12. Process payment
 └────┬───────────────┘
      │ 13. Success/Failure response
      ▼
 ┌────────────────────┐
-│ Payment Service    │ 14. Update transaction status
+│ Payment Service │ 14. Update transaction status
 └────┬───────────────┘
      │ 15. Append PAYMENT_CAPTURED/FAILED event
      ▼
 ┌────────────────────┐
-│ Event Store        │ 16. Store event
+│ Event Store │ 16. Store event
 └────┬───────────────┘
      │ 17. Broadcast to WebSocket
      ▼
 ┌────────────────────┐
-│ WebSocket Service  │ 18. Notify subscribed clients
+│ WebSocket Service │ 18. Notify subscribed clients
 └────┬───────────────┘
      │ 19. Queue webhook delivery
      ▼
 ┌────────────────────┐
-│ RabbitMQ           │ 20. Enqueue webhook job
+│ RabbitMQ │ 20. Enqueue webhook job
 └────┬───────────────┘
      │ 21. Return response to client
      ▼
 ┌──────────┐
-│  Client  │ 22. Receive payment result
+│ Client │ 22. Receive payment result
 └──────────┘
 ```
 
 ---
 
-## 🔧 Low-Level Design (LLD)
+## Low-Level Design (LLD)
 
 ### Component Diagram: Payment Service
 
 ```typescript
 ┌─────────────────────────────────────────────────────────────────┐
-│                        PaymentService                            │
+│ PaymentService │
 ├─────────────────────────────────────────────────────────────────┤
-│ Dependencies:                                                    │
-│ - PrismaClient (database access)                                │
-│ - PaymentGatewayFactory (gateway selection)                     │
-│ - EventStoreService (event logging)                             │
-│ - WebSocketService (real-time notifications)                    │
-│ - CircuitBreakerRegistry (resilience)                           │
-│ - ThreeDSecureService (authentication)                          │
+│ Dependencies: │
+│ - PrismaClient (database access) │
+│ - PaymentGatewayFactory (gateway selection) │
+│ - EventStoreService (event logging) │
+│ - WebSocketService (real-time notifications) │
+│ - CircuitBreakerRegistry (resilience) │
+│ - ThreeDSecureService (authentication) │
 ├─────────────────────────────────────────────────────────────────┤
-│ Public Methods:                                                  │
-│                                                                  │
-│ + createPayment(request: PaymentRequest): Promise<Payment>      │
-│   Flow:                                                          │
-│   1. Validate payment request (amount > 0, currency valid)      │
-│   2. Create transaction record (status: PENDING)                │
-│   3. Append PAYMENT_INITIATED event                             │
-│   4. Check if 3DS required (EU cards, high-risk)                │
-│   5. If 3DS: initiate3DSAuth() → return challenge               │
-│   6. Get gateway via Factory (by merchant config)               │
-│   7. Wrap in Circuit Breaker                                    │
-│   8. Call gateway.processPayment()                              │
-│   9. Update transaction status                                  │
-│   10. Append PAYMENT_CAPTURED/FAILED event                      │
-│   11. Broadcast via WebSocket                                   │
-│   12. Queue webhook                                             │
-│   13. Return payment result                                     │
-│                                                                  │
-│ + capturePayment(paymentId: string): Promise<Payment>           │
-│   Flow:                                                          │
-│   1. Find payment (status must be AUTHORIZED)                   │
-│   2. Get gateway adapter                                        │
-│   3. Call gateway.captureAuthorization()                        │
-│   4. Update transaction (status: CAPTURED)                      │
-│   5. Append PAYMENT_CAPTURED event                              │
-│   6. Broadcast + webhook                                        │
-│                                                                  │
-│ + refundPayment(paymentId, amount?): Promise<Refund>            │
-│   Flow:                                                          │
-│   1. Find payment (status must be CAPTURED)                     │
-│   2. Validate refund amount (≤ captured amount)                 │
-│   3. Check existing refunds (prevent double refund)             │
-│   4. Get gateway adapter                                        │
-│   5. Call gateway.refund()                                      │
-│   6. Create refund record                                       │
-│   7. Update transaction status                                  │
-│   8. Append PAYMENT_REFUNDED event                              │
-│   9. Broadcast + webhook                                        │
-│                                                                  │
+│ Public Methods: │
+│ │
+│ + createPayment(request: PaymentRequest): Promise<Payment> │
+│ Flow: │
+│ 1. Validate payment request (amount > 0, currency valid) │
+│ 2. Create transaction record (status: PENDING) │
+│ 3. Append PAYMENT_INITIATED event │
+│ 4. Check if 3DS required (EU cards, high-risk) │
+│ 5. If 3DS: initiate3DSAuth() → return challenge │
+│ 6. Get gateway via Factory (by merchant config) │
+│ 7. Wrap in Circuit Breaker │
+│ 8. Call gateway.processPayment() │
+│ 9. Update transaction status │
+│ 10. Append PAYMENT_CAPTURED/FAILED event │
+│ 11. Broadcast via WebSocket │
+│ 12. Queue webhook │
+│ 13. Return payment result │
+│ │
+│ + capturePayment(paymentId: string): Promise<Payment> │
+│ Flow: │
+│ 1. Find payment (status must be AUTHORIZED) │
+│ 2. Get gateway adapter │
+│ 3. Call gateway.captureAuthorization() │
+│ 4. Update transaction (status: CAPTURED) │
+│ 5. Append PAYMENT_CAPTURED event │
+│ 6. Broadcast + webhook │
+│ │
+│ + refundPayment(paymentId, amount?): Promise<Refund> │
+│ Flow: │
+│ 1. Find payment (status must be CAPTURED) │
+│ 2. Validate refund amount (≤ captured amount) │
+│ 3. Check existing refunds (prevent double refund) │
+│ 4. Get gateway adapter │
+│ 5. Call gateway.refund() │
+│ 6. Create refund record │
+│ 7. Update transaction status │
+│ 8. Append PAYMENT_REFUNDED event │
+│ 9. Broadcast + webhook │
+│ │
 │ + complete3DSAuthentication(threeDSId, paRes): Promise<Payment> │
-│   Flow:                                                          │
-│   1. Verify 3DS challenge                                       │
-│   2. If authenticated: resume payment flow                      │
-│   3. If failed: mark payment as failed                          │
-│                                                                  │
-│ + getPaymentStatus(paymentId): Promise<PaymentStatus>           │
-│   Query from database or gateway                                │
+│ Flow: │
+│ 1. Verify 3DS challenge │
+│ 2. If authenticated: resume payment flow │
+│ 3. If failed: mark payment as failed │
+│ │
+│ + getPaymentStatus(paymentId): Promise<PaymentStatus> │
+│ Query from database or gateway │
 ├─────────────────────────────────────────────────────────────────┤
-│ Private Methods:                                                 │
-│ - validatePaymentRequest(request): void                         │
-│ - shouldRequire3DS(payment): boolean                            │
-│ - calculateFees(amount, merchantId): number                     │
-│ - logPaymentEvent(event, data): Promise<void>                   │
+│ Private Methods: │
+│ - validatePaymentRequest(request): void │
+│ - shouldRequire3DS(payment): boolean │
+│ - calculateFees(amount, merchantId): number │
+│ - logPaymentEvent(event, data): Promise<void> │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -598,114 +598,114 @@ TRANSACTION_UPDATED;
 ```prisma
 // Transaction lifecycle
 model Transaction {
-  id                String              @id @default(uuid())
-  merchantId        String
-  merchant          Merchant            @relation(fields: [merchantId], references: [id])
-  customerId        String?
-  customer          Customer?           @relation(fields: [customerId], references: [id])
+  id String @id @default(uuid())
+  merchantId String
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+  customerId String?
+  customer Customer? @relation(fields: [customerId], references: [id])
 
-  amount            Decimal             @db.Decimal(12, 2)
-  currency          String              @default("USD")
-  status            TransactionStatus
-  type              TransactionType
+  amount Decimal @db.Decimal(12, 2)
+  currency String @default("USD")
+  status TransactionStatus
+  type TransactionType
 
-  gateway           PaymentGateway?
+  gateway PaymentGateway?
   gatewayTransactionId String?
 
-  description       String?
-  metadata          Json?
+  description String?
+  metadata Json?
 
   authorizationCode String?
-  errorCode         String?
-  errorMessage      String?
+  errorCode String?
+  errorMessage String?
 
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  events            EventStore[]
-  threeDSecure      ThreeDSecure?
+  events EventStore[]
+  threeDSecure ThreeDSecure?
 }
 
 // Event Sourcing
 model EventStore {
-  id            String    @id @default(uuid())
-  aggregateId   String    // Transaction ID
-  aggregateType String    // "Transaction"
-  eventType     String    // "PAYMENT_CAPTURED"
-  payload       Json
-  version       Int
-  timestamp     DateTime  @default(now())
+  id String @id @default(uuid())
+  aggregateId String // Transaction ID
+  aggregateType String // "Transaction"
+  eventType String // "PAYMENT_CAPTURED"
+  payload Json
+  version Int
+  timestamp DateTime @default(now())
 
-  transaction   Transaction? @relation(fields: [aggregateId], references: [id])
+  transaction Transaction? @relation(fields: [aggregateId], references: [id])
 
   @@index([aggregateId, version])
 }
 
 // Circuit Breaker State
 model CircuitBreakerState {
-  id                String   @id
-  serviceName       String   @unique
-  state             String   // CLOSED, OPEN, HALF_OPEN
-  failureCount      Int      @default(0)
-  successCount      Int      @default(0)
-  lastFailureTime   DateTime?
-  lastSuccessTime   DateTime?
-  nextRetryTime     DateTime?
-  updatedAt         DateTime @updatedAt
+  id String @id
+  serviceName String @unique
+  state String // CLOSED, OPEN, HALF_OPEN
+  failureCount Int @default(0)
+  successCount Int @default(0)
+  lastFailureTime DateTime?
+  lastSuccessTime DateTime?
+  nextRetryTime DateTime?
+  updatedAt DateTime @updatedAt
 }
 
 // Authentication
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  password      String
-  role          UserRole
-  permissions   Permission[]
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  role UserRole
+  permissions Permission[]
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
   refreshTokens RefreshToken[]
-  merchant      Merchant?
+  merchant Merchant?
 }
 
 model RefreshToken {
-  id          String   @id @default(uuid())
-  token       String   @unique
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  expiresAt   DateTime
-  ipAddress   String?
-  userAgent   String?
-  createdAt   DateTime @default(now())
+  id String @id @default(uuid())
+  token String @unique
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
 
   @@index([userId])
 }
 
 // 3D Secure
 model ThreeDSecure {
-  id              String              @id @default(uuid())
-  transactionId   String              @unique
-  transaction     Transaction         @relation(fields: [transactionId], references: [id])
-  status          ThreeDSecureStatus
-  pareq           String
-  pares           String?
-  acsUrl          String
-  eci             String?
-  cavv            String?
-  xid             String?
-  expiresAt       DateTime
-  createdAt       DateTime            @default(now())
+  id String @id @default(uuid())
+  transactionId String @unique
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  status ThreeDSecureStatus
+  pareq String
+  pares String?
+  acsUrl String
+  eci String?
+  cavv String?
+  xid String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 // Gateway Configuration
 model GatewayConfig {
-  id           String         @id @default(uuid())
-  merchantId   String
-  merchant     Merchant       @relation(fields: [merchantId], references: [id])
-  gateway      PaymentGateway
-  isActive     Boolean        @default(true)
-  priority     Int            @default(1)
-  config       Json           // API keys, settings
-  createdAt    DateTime       @default(now())
+  id String @id @default(uuid())
+  merchantId String
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+  gateway PaymentGateway
+  isActive Boolean @default(true)
+  priority Int @default(1)
+  config Json // API keys, settings
+  createdAt DateTime @default(now())
 
   @@unique([merchantId, gateway])
 }
@@ -714,54 +714,54 @@ model GatewayConfig {
 ### Sequence Diagram: 3D Secure Flow
 
 ```
-Client          API Gateway     Payment Service    3DS Service     Gateway Adapter
-  │                  │                 │                 │                │
-  │ POST /payment    │                 │                 │                │
-  ├─────────────────>│                 │                 │                │
-  │                  │ Auth + Validate │                 │                │
-  │                  ├────────────────>│                 │                │
-  │                  │                 │ Check 3DS req?  │                │
-  │                  │                 ├────────────────>│                │
-  │                  │                 │  EU card = YES  │                │
-  │                  │                 │<────────────────┤                │
-  │                  │                 │ initiate3DS()   │                │
-  │                  │                 ├────────────────>│                │
-  │                  │                 │ Generate PaReq  │                │
-  │                  │                 │ Store in DB     │                │
-  │                  │                 │<────────────────┤                │
-  │  200 {requires3DS: true, acsUrl, pareq}             │                │
+Client API Gateway Payment Service 3DS Service Gateway Adapter
+  │ │ │ │ │
+  │ POST /payment │ │ │ │
+  ├─────────────────>│ │ │ │
+  │ │ Auth + Validate │ │ │
+  │ ├────────────────>│ │ │
+  │ │ │ Check 3DS req? │ │
+  │ │ ├────────────────>│ │
+  │ │ │ EU card = YES │ │
+  │ │ │<────────────────┤ │
+  │ │ │ initiate3DS() │ │
+  │ │ ├────────────────>│ │
+  │ │ │ Generate PaReq │ │
+  │ │ │ Store in DB │ │
+  │ │ │<────────────────┤ │
+  │ 200 {requires3DS: true, acsUrl, pareq} │ │
   │<──────────────────────────────────────────────────────────────────────┤
-  │                  │                 │                 │                │
-  │ User completes   │                 │                 │                │
-  │ bank challenge   │                 │                 │                │
-  │ at ACS page      │                 │                 │                │
-  │                  │                 │                 │                │
-  │ POST /3ds/complete?pares=xxx       │                 │                │
-  ├─────────────────>│                 │                 │                │
-  │                  │  complete3DS()  │                 │                │
-  │                  ├────────────────>│                 │                │
-  │                  │                 │ verify3DS()     │                │
-  │                  │                 ├────────────────>│                │
-  │                  │                 │ Check PaRes     │                │
-  │                  │                 │ Generate ECI,CAVV                │
-  │                  │                 │<────────────────┤                │
-  │                  │                 │  If SUCCESS     │                │
-  │                  │                 │  Resume payment │                │
-  │                  │                 │  processPayment()│                │
-  │                  │                 ├─────────────────────────────────>│
-  │                  │                 │                 │ Process with ECI│
-  │                  │                 │<─────────────────────────────────┤
-  │  200 {status: CAPTURED}            │                 │                │
+  │ │ │ │ │
+  │ User completes │ │ │ │
+  │ bank challenge │ │ │ │
+  │ at ACS page │ │ │ │
+  │ │ │ │ │
+  │ POST /3ds/complete?pares=xxx │ │ │
+  ├─────────────────>│ │ │ │
+  │ │ complete3DS() │ │ │
+  │ ├────────────────>│ │ │
+  │ │ │ verify3DS() │ │
+  │ │ ├────────────────>│ │
+  │ │ │ Check PaRes │ │
+  │ │ │ Generate ECI,CAVV │
+  │ │ │<────────────────┤ │
+  │ │ │ If SUCCESS │ │
+  │ │ │ Resume payment │ │
+  │ │ │ processPayment()│ │
+  │ │ ├─────────────────────────────────>│
+  │ │ │ │ Process with ECI│
+  │ │ │<─────────────────────────────────┤
+  │ 200 {status: CAPTURED} │ │ │
   │<──────────────────────────────────────────────────────────────────────┤
 ```
 
 ---
 
-## 📘 Architecture Decision Records (ADR)
+## Architecture Decision Records (ADR)
 
 ### ADR-001: Event Sourcing for Audit Trail
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Payment systems require complete audit trails for compliance (PCI DSS, SOX). Traditional CRUD loses history when records are updated.
@@ -771,12 +771,12 @@ Implement Event Sourcing pattern where every state change is stored as an immuta
 
 **Consequences**:
 
-- ✅ Complete audit trail for regulators
-- ✅ Time-travel debugging possible
-- ✅ Event replay for testing
-- ✅ Never lose transaction history
-- ❌ Increased storage requirements
-- ❌ Query complexity (need aggregation)
+- Complete audit trail for regulators
+- Time-travel debugging possible
+- Event replay for testing
+- Never lose transaction history
+- Increased storage requirements
+- Query complexity (need aggregation)
 
 **Alternatives Considered**:
 
@@ -787,7 +787,7 @@ Implement Event Sourcing pattern where every state change is stored as an immuta
 
 ### ADR-002: CQRS for Read/Write Separation
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Payment dashboards need complex analytics (success rates, trends, top customers) while write operations need ACID guarantees and strict validation.
@@ -797,12 +797,12 @@ Separate read models (queries) from write models (commands) using CQRS pattern.
 
 **Consequences**:
 
-- ✅ Optimized queries with denormalized read models
-- ✅ Can scale reads independently from writes
-- ✅ Redis caching for analytics
-- ✅ Simple command validation
-- ❌ Eventual consistency between models
-- ❌ Increased complexity
+- Optimized queries with denormalized read models
+- Can scale reads independently from writes
+- Redis caching for analytics
+- Simple command validation
+- Eventual consistency between models
+- Increased complexity
 
 **Implementation**:
 
@@ -813,7 +813,7 @@ Separate read models (queries) from write models (commands) using CQRS pattern.
 
 ### ADR-003: Circuit Breaker for Gateway Resilience
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 External payment gateways can fail or timeout. Without protection, failures cascade and exhaust connection pools.
@@ -823,21 +823,21 @@ Implement Circuit Breaker pattern with three states (CLOSED, OPEN, HALF_OPEN).
 
 **Consequences**:
 
-- ✅ Fast failure when gateway is down
-- ✅ Automatic recovery testing
-- ✅ Prevents connection pool exhaustion
-- ✅ System remains responsive
-- ❌ False positives during transient failures
-- ❌ Configuration tuning required
+- Fast failure when gateway is down
+- Automatic recovery testing
+- Prevents connection pool exhaustion
+- System remains responsive
+- False positives during transient failures
+- Configuration tuning required
 
 **Configuration**:
 
 ```typescript
 {
-  failureThreshold: 5,      // Open after 5 failures
-  successThreshold: 2,      // Close after 2 successes
-  timeout: 30000,           // 30s before retry
-  monitoringPeriod: 60000   // 60s failure window
+  failureThreshold: 5, // Open after 5 failures
+  successThreshold: 2, // Close after 2 successes
+  timeout: 30000, // 30s before retry
+  monitoringPeriod: 60000 // 60s failure window
 }
 ```
 
@@ -845,7 +845,7 @@ Implement Circuit Breaker pattern with three states (CLOSED, OPEN, HALF_OPEN).
 
 ### ADR-004: Multi-Gateway Strategy Pattern
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Supporting multiple payment gateways (Stripe, PayPal, Razorpay) with different APIs creates tight coupling and duplication.
@@ -855,12 +855,12 @@ Use Strategy Pattern with Factory for gateway selection.
 
 **Consequences**:
 
-- ✅ Unified interface (`PaymentGatewayInterface`)
-- ✅ Easy to add new gateways
-- ✅ Runtime gateway selection
-- ✅ Test isolation (mock gateways)
-- ❌ Lowest common denominator API
-- ❌ Gateway-specific features require workarounds
+- Unified interface (`PaymentGatewayInterface`)
+- Easy to add new gateways
+- Runtime gateway selection
+- Test isolation (mock gateways)
+- Lowest common denominator API
+- Gateway-specific features require workarounds
 
 **Structure**:
 
@@ -881,7 +881,7 @@ class PaymentGatewayFactory {
 
 ### ADR-005: JWT Refresh Token Rotation
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Long-lived JWT tokens pose security risk if stolen. Short-lived tokens require frequent re-authentication.
@@ -894,11 +894,11 @@ Implement refresh token rotation:
 
 **Consequences**:
 
-- ✅ Limits exposure window for stolen access tokens
-- ✅ Rotation prevents refresh token reuse
-- ✅ Can revoke all sessions (delete refresh tokens)
-- ❌ Database lookup on every refresh
-- ❌ More complex client logic
+- Limits exposure window for stolen access tokens
+- Rotation prevents refresh token reuse
+- Can revoke all sessions (delete refresh tokens)
+- Database lookup on every refresh
+- More complex client logic
 
 **Security Measures**:
 
@@ -910,7 +910,7 @@ Implement refresh token rotation:
 
 ### ADR-006: Fastify over Express
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Need high-performance web framework for payment processing with built-in schema validation.
@@ -920,13 +920,13 @@ Use Fastify 4.x instead of Express.
 
 **Consequences**:
 
-- ✅ 10x faster than Express (benchmarks)
-- ✅ Built-in JSON schema validation
-- ✅ TypeScript-first design
-- ✅ Modern async/await support
-- ✅ Plugin ecosystem
-- ❌ Smaller community than Express
-- ❌ Fewer third-party middleware
+- 10x faster than Express (benchmarks)
+- Built-in JSON schema validation
+- TypeScript-first design
+- Modern async/await support
+- Plugin ecosystem
+- Smaller community than Express
+- Fewer third-party middleware
 
 **Performance**:
 
@@ -937,7 +937,7 @@ Use Fastify 4.x instead of Express.
 
 ### ADR-007: Prisma ORM for Type Safety
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Financial data requires strict type safety. Manual SQL query building is error-prone.
@@ -947,13 +947,13 @@ Use Prisma as the ORM layer.
 
 **Consequences**:
 
-- ✅ Auto-generated TypeScript types
-- ✅ Type-safe queries (catch errors at compile time)
-- ✅ Automatic migrations
-- ✅ Query optimization
-- ✅ Connection pooling
-- ❌ Learning curve for team
-- ❌ Abstraction limitations for complex queries
+- Auto-generated TypeScript types
+- Type-safe queries (catch errors at compile time)
+- Automatic migrations
+- Query optimization
+- Connection pooling
+- Learning curve for team
+- Abstraction limitations for complex queries
 
 **Example**:
 
@@ -973,7 +973,7 @@ const payment = await prisma.transaction.create({
 
 ### ADR-008: PostgreSQL over NoSQL
 
-**Status**: ✅ Accepted
+**Status**: Accepted
 
 **Context**:
 Payment systems need ACID guarantees for financial consistency.
@@ -983,13 +983,13 @@ Use PostgreSQL 15 as primary database.
 
 **Consequences**:
 
-- ✅ ACID transactions (critical for payments)
-- ✅ Referential integrity (foreign keys)
-- ✅ JSON support (JSONB for metadata)
-- ✅ Mature ecosystem
-- ✅ Point-in-time recovery
-- ❌ Vertical scaling limits
-- ❌ Schema migrations required
+- ACID transactions (critical for payments)
+- Referential integrity (foreign keys)
+- JSON support (JSONB for metadata)
+- Mature ecosystem
+- Point-in-time recovery
+- Vertical scaling limits
+- Schema migrations required
 
 **Why not NoSQL**:
 
@@ -999,7 +999,7 @@ Use PostgreSQL 15 as primary database.
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 ### Backend
 
@@ -1043,7 +1043,7 @@ Use PostgreSQL 15 as primary database.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -1132,7 +1132,7 @@ npm run dev
 
 ---
 
-## 📚 API Documentation
+## API Documentation
 
 ### Interactive Documentation
 
@@ -1143,61 +1143,61 @@ Visit **http://localhost:3000/docs** for full interactive API documentation (Swa
 #### Merchants
 
 ```http
-POST   /v1/merchants/register    # Register new merchant
-GET    /v1/merchants/me           # Get merchant details
+POST /v1/merchants/register # Register new merchant
+GET /v1/merchants/me # Get merchant details
 ```
 
 #### Payments
 
 ```http
-POST   /v1/payments              # Create payment
-GET    /v1/payments/:id          # Get payment details
-POST   /v1/payments/:id/capture  # Capture authorized payment
-POST   /v1/payments/:id/refund   # Refund payment
-POST   /v1/payments/:id/void     # Void authorization
+POST /v1/payments # Create payment
+GET /v1/payments/:id # Get payment details
+POST /v1/payments/:id/capture # Capture authorized payment
+POST /v1/payments/:id/refund # Refund payment
+POST /v1/payments/:id/void # Void authorization
 ```
 
 #### Transactions
 
 ```http
-GET    /v1/transactions          # List transactions (with filters)
-GET    /v1/transactions/:id      # Get transaction details
+GET /v1/transactions # List transactions (with filters)
+GET /v1/transactions/:id # Get transaction details
 ```
 
 #### Customers
 
 ```http
-POST   /v1/customers              # Create customer
-GET    /v1/customers/:id          # Get customer details
+POST /v1/customers # Create customer
+GET /v1/customers/:id # Get customer details
 ```
 
 #### Webhooks
 
 ```http
-POST   /v1/webhooks               # Create webhook
-GET    /v1/webhooks               # List webhooks
-DELETE /v1/webhooks/:id           # Delete webhook
+POST /v1/webhooks # Create webhook
+GET /v1/webhooks # List webhooks
+DELETE /v1/webhooks/:id # Delete webhook
 ```
 
 #### Simulator
 
 ```http
-GET    /v1/simulator/config     # Get simulator settings
-PUT    /v1/simulator/config     # Update simulator settings
-GET    /v1/simulator/scenarios   # List test scenarios
+GET /v1/simulator/config # Get simulator settings
+PUT /v1/simulator/config # Update simulator settings
+GET /v1/simulator/scenarios # List test scenarios
 ```
 
 ### Test Card Numbers
 
-| Card Number        | Scenario        | Expected Result            |
-| ------------------ | --------------- | -------------------------- |
-| `4242424242424242` | Success         | Payment succeeds ✅        |
-| `4000000000000002` | Declined        | Card declined ❌           |
-| `4000000000009995` | Insufficient    | Insufficient funds ❌      |
-| `4000000000000069` | Expired         | Card expired ❌            |
-| `4000000000000127` | Invalid CVV     | CVV check failed ❌        |
-| `4000000000000119` | Generic Decline | Card declined ❌           |
-| `4000002500003155` | 3DS Required    | Triggers 3D Secure flow 🔐 |
+| Card Number        | Scenario        | Expected Result         |
+| ------------------ | --------------- | ----------------------- |
+| `4242424242424242` | Success         | Payment succeeds        |
+| `4000000000000002` | Declined        | Card declined           |
+| `4000000000009995` | Insufficient    | Insufficient funds      |
+| `4000000000000069` | Expired         | Card expired            |
+| `4000000000000127` | Invalid CVV     | CVV check failed        |
+| `4000000000000119` | Generic Decline | Card declined           |
+| `4000002500003155` | 3DS Required    | Triggers 3D Secure flow |
 
 ### Example: Create Payment
 
@@ -1251,60 +1251,60 @@ curl -X POST http://localhost:3000/v1/payments \
 
 ---
 
-## 🧪 Testing Strategy
+## Testing Strategy
 
 ### Current Test Coverage
 
 **Overall**: 165 passing tests across 29 suites (~80% line coverage)
 
-| Category                                                   | Suites | Tests   | Status                |
-| ---------------------------------------------------------- | ------ | ------- | --------------------- |
-| Middleware (Auth + RBAC)                                   | 2      | 14      | ✅ Passing            |
-| Payment Services                                           | 3      | 19      | ✅ Passing            |
-| Gateway Adapters                                           | 4      | 24      | ✅ Passing            |
-| Infrastructure (Circuit Breaker, Event Store, WebSocket)   | 4      | 29      | ✅ Passing            |
-| Domain Services (Customer, Merchant, Transaction, Webhook) | 4      | 16      | ✅ Passing            |
-| Simulator (Engine + Service)                               | 2      | 9       | ✅ Passing            |
-| Auth + Query Services                                      | 2      | 10      | ✅ Passing            |
-| 3DS Service                                                | 2      | 12      | ✅ Passing            |
-| Route Integration Tests                                    | 7      | 27      | ✅ Passing            |
-| **Total**                                                  | **29** | **165** | **✅ 100% pass rate** |
+| Category                                                   | Suites | Tests   | Status              |
+| ---------------------------------------------------------- | ------ | ------- | ------------------- |
+| Middleware (Auth + RBAC)                                   | 2      | 14      | Passing             |
+| Payment Services                                           | 3      | 19      | Passing             |
+| Gateway Adapters                                           | 4      | 24      | Passing             |
+| Infrastructure (Circuit Breaker, Event Store, WebSocket)   | 4      | 29      | Passing             |
+| Domain Services (Customer, Merchant, Transaction, Webhook) | 4      | 16      | Passing             |
+| Simulator (Engine + Service)                               | 2      | 9       | Passing             |
+| Auth + Query Services                                      | 2      | 10      | Passing             |
+| 3DS Service                                                | 2      | 12      | Passing             |
+| Route Integration Tests                                    | 7      | 27      | Passing             |
+| **Total**                                                  | **29** | **165** | ** 100% pass rate** |
 
 ### Test Structure
 
 ```
 tests/
 ├── unit/
-│   ├── auth-middleware.test.ts
-│   ├── rbac-middleware.test.ts
-│   ├── payment-service.test.ts
-│   ├── payment-service-extended.test.ts
-│   ├── threeds-service.test.ts
-│   ├── threeds-service-extended.test.ts
-│   ├── circuit-breaker.test.ts
-│   ├── event-store.test.ts
-│   ├── gateway-factory.test.ts
-│   ├── stripe-adapter.test.ts
-│   ├── paypal-adapter.test.ts
-│   ├── razorpay-adapter.test.ts
-│   ├── websocket-service.test.ts
-│   ├── websocket-service-extended.test.ts
-│   ├── simulator-engine.test.ts
-│   ├── simulator-service.test.ts
-│   ├── merchant-service.test.ts
-│   ├── customer-service.test.ts
-│   ├── transaction-service.test.ts
-│   ├── webhook-service.test.ts
-│   ├── auth-service.test.ts
-│   └── payment-query-service.test.ts
+│ ├── auth-middleware.test.ts
+│ ├── rbac-middleware.test.ts
+│ ├── payment-service.test.ts
+│ ├── payment-service-extended.test.ts
+│ ├── threeds-service.test.ts
+│ ├── threeds-service-extended.test.ts
+│ ├── circuit-breaker.test.ts
+│ ├── event-store.test.ts
+│ ├── gateway-factory.test.ts
+│ ├── stripe-adapter.test.ts
+│ ├── paypal-adapter.test.ts
+│ ├── razorpay-adapter.test.ts
+│ ├── websocket-service.test.ts
+│ ├── websocket-service-extended.test.ts
+│ ├── simulator-engine.test.ts
+│ ├── simulator-service.test.ts
+│ ├── merchant-service.test.ts
+│ ├── customer-service.test.ts
+│ ├── transaction-service.test.ts
+│ ├── webhook-service.test.ts
+│ ├── auth-service.test.ts
+│ └── payment-query-service.test.ts
 ├── integration/
-│   ├── health-routes.test.ts
-│   ├── payment-routes.test.ts
-│   ├── transaction-routes.test.ts
-│   ├── customer-routes.test.ts
-│   ├── webhook-routes.test.ts
-│   ├── simulator-routes.test.ts
-│   └── merchant-routes.test.ts
+│ ├── health-routes.test.ts
+│ ├── payment-routes.test.ts
+│ ├── transaction-routes.test.ts
+│ ├── customer-routes.test.ts
+│ ├── webhook-routes.test.ts
+│ ├── simulator-routes.test.ts
+│ └── merchant-routes.test.ts
 ```
 
 ### Running Tests
@@ -1362,7 +1362,7 @@ describe('CircuitBreaker', () => {
 
 ---
 
-## 💡 Key Insights & Lessons Learned
+## Key Insights & Lessons Learned
 
 ### 1. Event Sourcing Complexity Trade-offs
 
@@ -1370,10 +1370,10 @@ describe('CircuitBreaker', () => {
 
 **What we learned**:
 
-- ✅ Event replay is invaluable for debugging
-- ✅ Audit trail is compliance gold
-- ❌ Need CQRS for efficient queries
-- ❌ Storage grows linearly with events
+- Event replay is invaluable for debugging
+- Audit trail is compliance gold
+- Need CQRS for efficient queries
+- Storage grows linearly with events
 
 **Recommendation**: Use event sourcing only for domains that need strict audit trails (payments, accounting, medical records).
 
@@ -1399,10 +1399,10 @@ describe('CircuitBreaker', () => {
 
 **What we learned**:
 
-- ✅ Dashboard queries don't impact payment processing
-- ✅ Can cache read models aggressively (5 min TTL)
-- ✅ Eventual consistency is acceptable for analytics
-- ❌ Writes must be strongly consistent
+- Dashboard queries don't impact payment processing
+- Can cache read models aggressively (5 min TTL)
+- Eventual consistency is acceptable for analytics
+- Writes must be strongly consistent
 
 **Metrics**:
 
@@ -1432,11 +1432,11 @@ describe('CircuitBreaker', () => {
 
 **What we learned**:
 
-- ✅ Easy to add new gateways (implement interface)
-- ✅ Test isolation (mock gateways)
-- ✅ Runtime selection (choose by merchant config)
-- ❌ Lowest common denominator API
-- ❌ Gateway-specific features need workarounds
+- Easy to add new gateways (implement interface)
+- Test isolation (mock gateways)
+- Runtime selection (choose by merchant config)
+- Lowest common denominator API
+- Gateway-specific features need workarounds
 
 **Example**: Stripe has more 3DS options than PayPal. Interface supports basic 3DS only.
 
@@ -1464,13 +1464,13 @@ describe('CircuitBreaker', () => {
 **What we learned**:
 
 ```javascript
-// ❌ WRONG - JavaScript floats are imprecise
+// WRONG - JavaScript floats are imprecise
 0.1 + 0.2 === 0.30000000000000004;
 
-// ✅ CORRECT - Use Decimal library
+// CORRECT - Use Decimal library
 new Decimal('0.1').plus('0.2').equals('0.3'); // true
 
-// ✅ ALTERNATIVE - Store cents as integers
+// ALTERNATIVE - Store cents as integers
 const amountCents = 1000; // $10.00
 ```
 
@@ -1535,7 +1535,7 @@ const socket = io(url, {
 
 ---
 
-## 📦 Deployment
+## Deployment
 
 ### Environment Variables
 
@@ -1628,7 +1628,7 @@ curl http://localhost:3000/health
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Here's how to get started:
 
@@ -1660,7 +1660,7 @@ We welcome contributions! Here's how to get started:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
 
@@ -1690,7 +1690,7 @@ SOFTWARE.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Inspired by**: Stripe, PayPal, Razorpay production systems
 - **Tech Stack**: Node.js, TypeScript, Fastify, React, PostgreSQL, Redis, RabbitMQ
@@ -1699,7 +1699,7 @@ SOFTWARE.
 
 ---
 
-## 📞 Support
+## Support
 
 - **Documentation**: See [docs](./ARCHITECTURE.md) folder
 - **Issues**: Open an issue in the repository
@@ -1710,11 +1710,11 @@ SOFTWARE.
 
 <div align="center">
 
-**[⬆ back to top](#payment-platform-simulator)**
+**[back to top](#payment-platform-simulator)**
 
-Made with ❤️ by [Yash Vyas](https://www.linkedin.com/in/yashvyas0/) using modern TypeScript, React, and enterprise patterns
+Made with by [Yash Vyas](https://www.linkedin.com/in/yashvyas0/) using modern TypeScript, React, and enterprise patterns
 
-⭐ **Star this repo if you find it helpful!**
+**Star this repo if you find it helpful!**
 
 [Report Bug](https://github.com/yashvyas95/Payment_Platform_Simulator/issues) • [Request Feature](https://github.com/yashvyas95/Payment_Platform_Simulator/issues) • [Documentation](./ARCHITECTURE.md)
 
@@ -1722,7 +1722,7 @@ Made with ❤️ by [Yash Vyas](https://www.linkedin.com/in/yashvyas0/) using mo
 
 ---
 
-## 📊 Project Statistics
+## Project Statistics
 
 | Metric                | Value      |
 | --------------------- | ---------- |

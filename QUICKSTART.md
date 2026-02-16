@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide
+# Quick Start Guide
 
 ## Prerequisites Installation
 
@@ -62,7 +62,7 @@ npm run dev
 
 The server will start at: http://localhost:3000
 
-## 🎯 Testing the API
+## Testing the API
 
 ### View API Documentation
 
@@ -103,16 +103,16 @@ $body = @{
 Invoke-RestMethod -Uri "http://localhost:3000/v1/payments" -Method Post -Headers $headers -Body $body
 ```
 
-## 🧪 Test Cards
+## Test Cards
 
-| Card Number      | Result          |
+| Card Number | Result |
 | ---------------- | --------------- |
-| 4242424242424242 | ✅ Success      |
-| 4000000000000002 | ❌ Declined     |
-| 4000000000009995 | ❌ Insufficient |
-| 4000000000000069 | ❌ Expired      |
+| 4242424242424242 | Success |
+| 4000000000000002 | Declined |
+| 4000000000009995 | Insufficient |
+| 4000000000000069 | Expired |
 
-## 📊 View Data
+## View Data
 
 ### Prisma Studio (Database GUI)
 
@@ -129,7 +129,7 @@ Open browser: http://localhost:15672
 - Username: admin
 - Password: admin
 
-## 🛑 Stop Services
+## Stop Services
 
 ```powershell
 # Stop development server: Ctrl+C
@@ -138,7 +138,7 @@ Open browser: http://localhost:15672
 npm run docker:down
 ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Port Already in Use
 
@@ -172,13 +172,13 @@ npm run prisma:migrate
 npm run prisma:seed
 ```
 
-## 📚 Next Steps
+## Next Steps
 
 1. Read [ARCHITECTURE.md](./ARCHITECTURE.md) for complete documentation
 2. Explore the API at http://localhost:3000/docs
 3. Check test scenarios in the simulator
 4. Set up webhooks for event notifications
 
-## 🎉 You're Ready!
+## You're Ready!
 
 Your Payment Platform Simulator is now running and ready for testing.
