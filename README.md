@@ -1694,7 +1694,6 @@ SOFTWARE.
 
 - **Inspired by**: Stripe, PayPal, Razorpay production systems
 - **Tech Stack**: Node.js, TypeScript, Fastify, React, PostgreSQL, Redis, RabbitMQ
-- **Contributors**: Thank you to all contributors who helped build this project
 - **Community**: Thanks to the open-source community for amazing libraries
 
 ---
